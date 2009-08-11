@@ -143,7 +143,8 @@ class SortedDataNode(template.Node):
         else:
             context[key] = queryset
 
-        return ''
+        return u''
+
 
 anchor = register.tag(anchor)
 autosort = register.tag(autosort)
