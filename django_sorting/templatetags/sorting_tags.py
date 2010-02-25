@@ -78,9 +78,20 @@ class SortAnchorNode(template.Node):
 
 def autosort(parser, token):
     bits = [b.strip('"\'') for b in token.split_contents()]
+    help_msg = u'autosort tag synopsis: {%% autosort queryset [as '\
+        u'context_variable] %%}'
+    context_var = None
+
+    # Check if has not required "as new_context_var" part
+    if len(bits) == 4 and bits[2] == 'as':
+        context_var = bits[3]
+        del bits[2:]
+    
     if len(bits) != 2:
-        raise TemplateSyntaxError, "autosort tag takes exactly one argument"
-    return SortedDataNode(bits[1])
+        raise TemplateSyntaxError(help_msg)
+
+    queryset = bits[1]
+    return SortedDataNode(bits[1], context_var=context_var)
 
 class SortedDataNode(template.Node):
     """
@@ -91,7 +102,10 @@ class SortedDataNode(template.Node):
         self.context_var = context_var
 
     def render(self, context):
-        key = self.queryset_var.var
+        if self.context_var is not None:
+            key = self.context_var
+        else:
+            key = self.queryset_var.var
         value = self.queryset_var.resolve(context)
         order_by = context['request'].field
         if len(order_by) > 1:
