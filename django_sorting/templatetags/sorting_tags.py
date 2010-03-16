@@ -1,6 +1,7 @@
 from django import template
 from django.http import Http404
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 register = template.Library()
 
@@ -17,16 +18,29 @@ sort_directions = {
 
 def anchor(parser, token):
     """
-    Parses a tag that's supposed to be in this format: {% anchor field title %}    
+    Parses a tag that's supposed to be in this format: {% anchor field title %}
+    Title may be a "string", _("trans string"), or variable
     """
-    bits = [b.strip('"\'') for b in token.split_contents()]
+    bits = [b for b in token.split_contents()]
     if len(bits) < 2:
         raise template.TemplateSyntaxError, "anchor tag takes at least 1 argument"
+
+    title_is_var = False
     try:
         title = bits[2]
+        if title[0] in ('"', "'"):
+            if title[0] == title[-1]:
+                title = title[1:-1]
+            else:
+                raise TemplateSyntaxError, 'anchor tag title must be a "string", _("trans string"), or variable'
+        elif title.startswith('_("') or title.startswith("_('"):
+            title = _(title[3:-2])
+        else:
+            title_is_var = True
+
     except IndexError:
         title = bits[1].capitalize()
-    return SortAnchorNode(bits[1].strip(), title.strip())
+    return SortAnchorNode(bits[1].strip(), title.strip(), title_is_var)
     
 
 class SortAnchorNode(template.Node):
@@ -41,11 +55,14 @@ class SortAnchorNode(template.Node):
         <a href="/the/current/path/?sort=name" title="Name">Name</a>
 
     """
-    def __init__(self, field, title):
+    def __init__(self, field, title, title_is_var):
         self.field = field
         self.title = title
+        self.title_is_var = title_is_var
 
     def render(self, context):
+        if self.title_is_var:
+            self.title = context[self.title]
         request = context['request']
         getvars = request.GET.copy()
         if 'sort' in getvars:

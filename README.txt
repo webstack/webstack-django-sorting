@@ -1,5 +1,5 @@
 How to use django-sorting
-----------------------------
+-------------------------
 
 ``django-sorting`` allows for easy sorting, and sorting links generation 
 without modifying your views.
@@ -45,12 +45,12 @@ There are really 5 steps to setting it up with your projects.
        
    
 6. Now, you want to display different headers with links to sort 
-your objects_list:
+your objects_list::
    
     <tr>
        <th>{% anchor first_name Name %}</th>
        <th>{% anchor creation_date Creation %}</th>
-        ...
+       ...
     </tr>
 
     The first argument is a field of the objects list, and the second 
