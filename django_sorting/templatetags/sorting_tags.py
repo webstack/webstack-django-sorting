@@ -7,13 +7,13 @@ register = template.Library()
 
 DEFAULT_SORT_UP = getattr(settings, 'DEFAULT_SORT_UP' , '&uarr;')
 DEFAULT_SORT_DOWN = getattr(settings, 'DEFAULT_SORT_DOWN' , '&darr;')
-INVALID_FIELD_RAISES_404 = getattr(settings, 
+INVALID_FIELD_RAISES_404 = getattr(settings,
         'SORTING_INVALID_FIELD_RAISES_404' , False)
 
 sort_directions = {
-    'asc': {'icon':DEFAULT_SORT_UP, 'inverse': 'desc'}, 
-    'desc': {'icon':DEFAULT_SORT_DOWN, 'inverse': 'asc'}, 
-    '': {'icon':DEFAULT_SORT_DOWN, 'inverse': 'asc'}, 
+    'asc': {'icon':DEFAULT_SORT_UP, 'inverse': 'desc'},
+    'desc': {'icon':DEFAULT_SORT_DOWN, 'inverse': 'asc'},
+    '': {'icon':DEFAULT_SORT_DOWN, 'inverse': 'asc'},
 }
 
 def anchor(parser, token):
@@ -41,13 +41,13 @@ def anchor(parser, token):
     except IndexError:
         title = bits[1].capitalize()
     return SortAnchorNode(bits[1].strip(), title.strip(), title_is_var)
-    
+
 
 class SortAnchorNode(template.Node):
     """
-    Renders an <a> HTML tag with a link which href attribute 
+    Renders an <a> HTML tag with a link which href attribute
     includes the field on which we sort and the direction.
-    and adds an up or down arrow if the field is the one 
+    and adds an up or down arrow if the field is the one
     currently being sorted on.
 
     Eg.
@@ -103,7 +103,7 @@ def autosort(parser, token):
     if len(bits) == 4 and bits[2] == 'as':
         context_var = bits[3]
         del bits[2:]
-    
+
     if len(bits) != 2:
         raise template.TemplateSyntaxError(help_msg)
 
@@ -140,4 +140,3 @@ class SortedDataNode(template.Node):
 
 anchor = register.tag(anchor)
 autosort = register.tag(autosort)
-
