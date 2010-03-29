@@ -32,7 +32,7 @@ def anchor(parser, token):
             if title[0] == title[-1]:
                 title = title[1:-1]
             else:
-                raise TemplateSyntaxError, 'anchor tag title must be a "string", _("trans string"), or variable'
+                raise template.TemplateSyntaxError, 'anchor tag title must be a "string", _("trans string"), or variable'
         elif title.startswith('_("') or title.startswith("_('"):
             title = _(title[3:-2])
         else:
