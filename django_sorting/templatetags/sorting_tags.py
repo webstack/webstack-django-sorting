@@ -127,19 +127,12 @@ class SortedDataNode(template.Node):
         order_by = context['request'].field
         if len(order_by) > 1:
             try:
-                from operator import itemgetter, attrgetter
-                if order_by[0] == '-':
-                    context[key] = sorted(value, key=attrgetter(order_by[1:]), reverse=True)
-                else:
-                    context[key] = sorted(value, key=attrgetter(order_by))
-            except AttributeError:
-                try:
-                    context[key] = value.order_by(order_by)
-                except template.TemplateSyntaxError:
-                    if INVALID_FIELD_RAISES_404:
-                        raise Http404('Invalid field sorting. If DEBUG were set to ' +
-                        'False, an HTTP 404 page would have been shown instead.')
-                    context[key] = value
+                context[key] = value.order_by(order_by)
+            except template.TemplateSyntaxError:
+                if INVALID_FIELD_RAISES_404:
+                    raise Http404('Invalid field sorting. If DEBUG were set to ' +
+                    'False, an HTTP 404 page would have been shown instead.')
+                context[key] = value
         else:
             context[key] = value
 
