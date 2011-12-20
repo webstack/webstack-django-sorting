@@ -1,6 +1,9 @@
+from operator import attrgetter
+
 from django import template
-from django.http import Http404
 from django.conf import settings
+from django.db.models import fields as django_fields
+from django.http import Http404
 from django.utils.translation import ugettext as _
 
 register = template.Library()
@@ -131,11 +134,30 @@ class SortedDataNode(template.Node):
             key = self.queryset_var.var
 
         queryset = self.queryset_var.resolve(context)
-
         order_by = context['request'].field
+
         if len(order_by) > 1:
+            # The field name can be prefixed by the minus sign and we need to
+            # extract this information if we want to sort on simple object
+            # attributes (non-model fields)
+            if order_by[0] == '-':
+                reverse = True
+                name = order_by[1:]
+            else:
+                reverse = False
+                name = order_by
+
+            # Is it an instance attribute? (no foo__bar syntax here).
+            attribute = getattr(queryset.model, name, None)
+            if isinstance(attribute, django_fields.Field):
+                # It's a model field so a classical order_by can be used
+                attribute = None
+
             try:
-                context[key] = queryset.order_by(order_by)
+                if attribute:
+                    context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
+                else:
+                    context[key] = queryset.order_by(order_by)
             except template.TemplateSyntaxError:
                 if INVALID_FIELD_RAISES_404:
                     raise Http404(
