@@ -37,9 +37,9 @@ def anchor(parser, token):
             title = _(title[3:-2])
         else:
             title_is_var = True
-
     except IndexError:
         title = bits[1].capitalize()
+
     return SortAnchorNode(bits[1].strip(), title.strip(), title_is_var)
 
 
@@ -65,25 +65,30 @@ class SortAnchorNode(template.Node):
             self.title = context[self.title]
         request = context['request']
         getvars = request.GET.copy()
+
         if 'sort' in getvars:
             sortby = getvars['sort']
             del getvars['sort']
         else:
             sortby = ''
+
         if 'dir' in getvars:
             sortdir = getvars['dir']
             del getvars['dir']
         else:
             sortdir = ''
+
         if sortby == self.field:
             getvars['dir'] = sort_directions[sortdir]['inverse']
             icon = sort_directions[sortdir]['icon']
         else:
             icon = ''
+
         if len(getvars.keys()) > 0:
             urlappend = "&%s" % getvars.urlencode()
         else:
             urlappend = ''
+
         if icon:
             title = "%s %s" % (self.title, icon)
         else:
@@ -123,8 +128,10 @@ class SortedDataNode(template.Node):
             key = self.context_var
         else:
             key = self.queryset_var.var
+
         value = self.queryset_var.resolve(context)
         order_by = context['request'].field
+
         if len(order_by) > 1:
             try:
                 context[key] = value.order_by(order_by)
