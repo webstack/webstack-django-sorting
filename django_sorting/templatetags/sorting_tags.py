@@ -107,8 +107,8 @@ def autosort(parser, token):
     if len(bits) != 2:
         raise template.TemplateSyntaxError(help_msg)
 
-    queryset = bits[1]
     return SortedDataNode(bits[1], context_var=context_var)
+
 
 class SortedDataNode(template.Node):
     """
