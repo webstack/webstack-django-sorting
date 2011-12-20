@@ -23,7 +23,7 @@ def anchor(parser, token):
     """
     bits = [b for b in token.split_contents()]
     if len(bits) < 2:
-        raise template.TemplateSyntaxError, "anchor tag takes at least 1 argument"
+        raise template.TemplateSyntaxError("anchor tag takes at least 1 argument")
 
     title_is_var = False
     try:
@@ -32,7 +32,8 @@ def anchor(parser, token):
             if title[0] == title[-1]:
                 title = title[1:-1]
             else:
-                raise template.TemplateSyntaxError, 'anchor tag title must be a "string", _("trans string"), or variable'
+                raise template.TemplateSyntaxError(
+                    'anchor tag title must be a "string", _("trans string"), or variable')
         elif title.startswith('_("') or title.startswith("_('"):
             title = _(title[3:-2])
         else:
@@ -137,8 +138,9 @@ class SortedDataNode(template.Node):
                 context[key] = queryset.order_by(order_by)
             except template.TemplateSyntaxError:
                 if INVALID_FIELD_RAISES_404:
-                    raise Http404('Invalid field sorting. If DEBUG were set to ' +
-                    'False, an HTTP 404 page would have been shown instead.')
+                    raise Http404(
+                        'Invalid field sorting. If DEBUG were set to '
+                        'False, an HTTP 404 page would have been shown instead.')
                 context[key] = queryset
         else:
             context[key] = queryset
