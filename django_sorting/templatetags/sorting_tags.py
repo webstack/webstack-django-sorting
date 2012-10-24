@@ -149,7 +149,7 @@ class SortedDataNode(template.Node):
         queryset = self.queryset_var.resolve(context)
         ordering = context['request'].field
 
-        if len(ordering) > 1:
+        if ordering:
             try:
                 if self.need_python_sorting(queryset, ordering):
                     # Fallback on pure Python sorting (much slower on large data)
@@ -158,6 +158,9 @@ class SortedDataNode(template.Node):
                     # extract this information if we want to sort on simple object
                     # attributes (non-model fields)
                     if ordering[0] == '-':
+                        if len(ordering) == 1:
+                            raise template.TemplateSyntaxError
+
                         reverse = True
                         name = ordering[1:]
                     else:
