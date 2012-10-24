@@ -2,22 +2,22 @@ from operator import attrgetter
 
 from django import template
 from django.conf import settings
-from django.db.models import fields as django_fields
+from django.db.models.fields import FieldDoesNotExist
 from django.http import Http404
 from django.utils.translation import ugettext as _
 
 register = template.Library()
 
-DEFAULT_SORT_UP = getattr(settings, 'DEFAULT_SORT_UP' , '&uarr;')
-DEFAULT_SORT_DOWN = getattr(settings, 'DEFAULT_SORT_DOWN' , '&darr;')
-INVALID_FIELD_RAISES_404 = getattr(settings,
-        'SORTING_INVALID_FIELD_RAISES_404' , False)
+DEFAULT_SORT_UP = getattr(settings, 'DEFAULT_SORT_UP', '&uarr;')
+DEFAULT_SORT_DOWN = getattr(settings, 'DEFAULT_SORT_DOWN', '&darr;')
+INVALID_FIELD_RAISES_404 = getattr(settings, 'SORTING_INVALID_FIELD_RAISES_404', False)
 
 sort_directions = {
-    'asc': {'icon':DEFAULT_SORT_UP, 'inverse': 'desc'},
-    'desc': {'icon':DEFAULT_SORT_DOWN, 'inverse': 'asc'},
-    '': {'icon':DEFAULT_SORT_DOWN, 'inverse': 'asc'},
+    'asc': {'icon': DEFAULT_SORT_UP, 'inverse': 'desc'},
+    'desc': {'icon': DEFAULT_SORT_DOWN, 'inverse': 'asc'},
+    '': {'icon': DEFAULT_SORT_DOWN, 'inverse': 'asc'},
 }
+
 
 def anchor(parser, token):
     """
@@ -127,6 +127,19 @@ class SortedDataNode(template.Node):
         self.queryset_var = template.Variable(queryset_var)
         self.context_var = context_var
 
+    def need_python_sorting(self, queryset, ordering):
+        if ordering.find('__') >= 0:
+            # Python can't sort ordering with '__'
+            return False
+
+        try:
+            tmp = ordering[1:] if ordering[0] == '-' else ordering
+            queryset.model._meta.get_field(tmp)
+        except FieldDoesNotExist:
+            return True
+
+        return False
+
     def render(self, context):
         if self.context_var is not None:
             key = self.context_var
@@ -134,31 +147,27 @@ class SortedDataNode(template.Node):
             key = self.queryset_var.var
 
         queryset = self.queryset_var.resolve(context)
-        order_by = context['request'].field
+        ordering = context['request'].field
 
-        if len(order_by) > 1:
-            # The field name can be prefixed by the minus sign and we need to
-            # extract this information if we want to sort on simple object
-            # attributes (non-model fields)
-            if order_by[0] == '-':
-                reverse = True
-                name = order_by[1:]
-            else:
-                reverse = False
-                name = order_by
-
-            # Is it an instance attribute? (no foo__bar syntax here).
-            attribute = getattr(queryset.model, name, None)
-            if isinstance(attribute, django_fields.Field):
-                # It's a model field so a classical order_by can be used
-                attribute = None
-
+        if len(ordering) > 1:
             try:
-                if attribute:
+                if self.need_python_sorting(queryset, ordering):
+                    # Fallback on pure Python sorting (much slower on large data)
+
+                    # The field name can be prefixed by the minus sign and we need to
+                    # extract this information if we want to sort on simple object
+                    # attributes (non-model fields)
+                    if ordering[0] == '-':
+                        reverse = True
+                        name = ordering[1:]
+                    else:
+                        reverse = False
+                        name = ordering
                     context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
                 else:
-                    context[key] = queryset.order_by(order_by)
+                    context[key] = queryset.order_by(ordering)
             except template.TemplateSyntaxError:
+                # Seems spurious to me...
                 if INVALID_FIELD_RAISES_404:
                     raise Http404(
                         'Invalid field sorting. If DEBUG were set to '
