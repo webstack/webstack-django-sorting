@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '0.1'
+version = '0.2'
 
 setup(
     name='django-sorting',
@@ -14,8 +14,9 @@ setup(
         "Environment :: Web Environment",
     ],
     keywords='sorting,pagination,django',
-    author='directeur',
-    url='http://github.com/directeur/django-sorting/tree/master',
+    author='stephane',
+    author_email='stephane.raimbault@gmail.com',
+    url='http://github.com/stephane/django-sorting/tree/master',
     license='BSD',
     packages=find_packages(),
     include_package_data=True,
