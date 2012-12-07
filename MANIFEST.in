@@ -1,2 +1,1 @@
-include CONTRIBUTORS.txt
-include LICENSE.txt
+include CONTRIBUTORS.txt LICENSE.txt README.rst
