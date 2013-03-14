@@ -132,13 +132,9 @@ class SortedDataNode(template.Node):
             # Python can't sort ordering with '__'
             return False
 
-        try:
-            tmp = ordering[1:] if ordering[0] == '-' else ordering
-            queryset.model._meta.get_field(tmp)
-        except FieldDoesNotExist:
-            return True
-
-        return False
+        # Python sorting if not a field
+        field = ordering[1:] if ordering[0] == '-' else ordering
+        return field not in queryset.model._meta.get_all_field_names()
 
     def render(self, context):
         if self.context_var is not None:
