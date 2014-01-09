@@ -1,0 +1,27 @@
+{% load sorting_tags %}
+
+<html>
+  <h2>List of files</h2>
+
+  {% autosort secret_files %}
+  <table>
+    <tr>
+      <th>{% anchor id "ID" %}</th>
+      <th>{% anchor filename "Filename" %}</th>
+      <th>{% anchor created_on "Date" %}</th>
+      <th>{% anchor size "Size" %}</th>
+      <th>{% anchor order "Order" %}</th>
+      <th>{% anchor is_secret "Secret?" %}</th>
+    </tr>
+    {% for secret_file in secret_files %}
+    <tr>
+      <td>{{ secret_file.id }}</td>
+      <td>{{ secret_file.filename }}</td>
+      <td>{{ secret_file.created_on }}</td>
+      <td>{{ secret_file.size }}</td>
+      <td>{{ secret_file.order }}</td>
+      <td>{{ secret_file.is_secret|yesno }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</html>

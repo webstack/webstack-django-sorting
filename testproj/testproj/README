@@ -1,0 +1,4 @@
+1. Create a virtualenv
+2. pip install django webstack_django_sorting
+3. ./manage.py syncdb
+4. ./manage.py runserver

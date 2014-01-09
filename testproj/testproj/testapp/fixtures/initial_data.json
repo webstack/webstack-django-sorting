@@ -1,0 +1,46 @@
+[
+{
+  "pk": 1,
+  "model": "testapp.secretfile",
+  "fields": {
+    "created_on": "2014-01-09T21:59:58Z",
+    "size": 10000,
+    "order": 1,
+    "is_secret": true,
+    "filename": "prism-password.txt"
+  }
+},
+{
+  "pk": 2,
+  "model": "testapp.secretfile",
+  "fields": {
+    "created_on": "2014-01-09T22:02:29Z",
+    "size": 123,
+    "order": 5,
+    "is_secret": false,
+    "filename": "open-data.csv"
+  }
+},
+{
+  "pk": 3,
+  "model": "testapp.secretfile",
+  "fields": {
+    "created_on": "2014-01-09T22:03:00Z",
+    "size": 14500,
+    "order": 15,
+    "is_secret": true,
+    "filename": "nsa-codes.txt"
+  }
+},
+{
+  "pk": 4,
+  "model": "testapp.secretfile",
+  "fields": {
+    "created_on": "2014-01-09T22:21:30Z",
+    "size": 999,
+    "order": -1,
+    "is_secret": false,
+    "filename": "0-w00t.crt"
+  }
+}
+]
