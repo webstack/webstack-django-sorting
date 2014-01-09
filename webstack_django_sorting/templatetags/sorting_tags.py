@@ -20,12 +20,12 @@ sort_directions = {
 
 def anchor(parser, token):
     """
-    Parses a tag that's supposed to be in this format: {% anchor field title %}
+    Parses a tag that's supposed to be in this format '{% anchor field title %}'
     Title may be a "string", _("trans string"), or variable
     """
     bits = [b for b in token.split_contents()]
     if len(bits) < 2:
-        raise template.TemplateSyntaxError("anchor tag takes at least 1 argument")
+        raise template.TemplateSyntaxError("anchor tag takes at least 1 argument.")
 
     title_is_var = False
     try:

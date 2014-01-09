@@ -1,8 +1,9 @@
-How to use django-sorting
--------------------------
+How to use webstack-django-sorting
+----------------------------------
 
-``django-sorting`` allows for easy sorting, and sorting links generation
-without modifying your views.
+``webstack-django-sorting`` allows for easy sorting, and sorting links
+generation without modifying your views. It is the perfect companion of
+linaro-django-pagination",
 
 There are really 5 steps to setting it up with your projects.
 
@@ -11,7 +12,7 @@ There are really 5 steps to setting it up with your projects.
 
        INSTALLED_APPS = (
            # ...
-           'django_sorting',
+           'webstack_django_sorting',
        )
 
 2. Install the sorting middleware. Your settings file might look something
@@ -19,24 +20,29 @@ There are really 5 steps to setting it up with your projects.
 
        MIDDLEWARE_CLASSES = (
            # ...
-           'django_sorting.middleware.SortingMiddleware',
+           'webstack_django_sorting.middleware.SortingMiddleware',
        )
 
-3. If it's not already added in your setup, add the request context processor.
-   Note that context processors are set by default implicitly, so to set them
-   explicitly, you need to copy and paste this code into your under
-   the value TEMPLATE_CONTEXT_PROCESSORS::
+3. If it's not already added in your setup, add the 'request' context processor::
 
-       ("django.core.context_processors.auth",
-        "django.core.context_processors.debug",
-        "django.core.context_processors.i18n",
-        "django.core.context_processors.media",
-        "django.core.context_processors.request")
+       TEMPLATE_CONTEXT_PROCESSORS = (
+           'django.contrib.auth.context_processors.auth',
+           'django.core.context_processors.debug',
+           'django.core.context_processors.i18n',
+           'django.core.context_processors.media',
+           'django.core.context_processors.static',
+           'django.core.context_processors.tz',
+           'django.core.context_processors.request',
+           'django.contrib.messages.context_processors.messages',
+       )
+
+   This example comes from Django 1.6, take care to check against your Django
+   version which context processors are supported (see ``global_settings.py``
+   file of your Django installation).
 
 4. Add this line at the top of your template to load the sorting tags::
 
        {% load sorting_tags %}
-
 
 5. Decide on a variable that you would like to sort, and use the
    autosort tag on that variable before iterating over it::

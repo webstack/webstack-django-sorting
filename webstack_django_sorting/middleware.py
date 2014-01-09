@@ -11,6 +11,7 @@ def get_direction(self):
     except (KeyError, ValueError, TypeError):
         return 'desc'
 
+
 class SortingMiddleware(object):
     """
     Inserts a variable representing the field (with direction of sorting)

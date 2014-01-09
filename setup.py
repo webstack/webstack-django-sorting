@@ -2,32 +2,37 @@
 #!/usr/bin/env python
 
 try:
-    from setuptools import setup, find_packages
-    package_list = find_packages()
+    from setuptools import setup
 except ImportError:
     from distutils.core import setup
-    package_list = ['django_sorting']
 
-version = '0.3'
+__version__ = '0.4'
 
 setup(
-    name='django-sorting',
-    version=version,
-    description="Like ericflo's django pagination, but this one does the sorting! Used with ericflo's pagination, displaying tabular paginated and sortable data is very easy",
+    name='webstack-django-sorting',
+    version=__version__,
+    description="Easy sorting of tables with Django",
     long_description=open('README.rst').read(),
     author='Stéphane Raimbault',
-    author_email='stephane.raimbault@gmail.com',
+    author_email='stephane.raimbault@webstack.fr',
     url='http://github.com/stephane/django-sorting/',
-    packages=package_list,
-    package_dir={'django_sorting': 'django_sorting'},
+    packages=[
+        'webstack_django_sorting',
+        'webstack_django_sorting.templatetags',
+    ],
+    package_dir={'webstack_django_sorting': 'webstack_django_sorting'},
     include_package_data=True,
     zip_safe=False,
     keywords='sorting,pagination,django',
     license='BSD',
     classifiers=[
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        "Framework :: Django",
-        "Environment :: Web Environment",
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'Framework :: Django',
+        'Environment :: Web Environment',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
     ],
 )
