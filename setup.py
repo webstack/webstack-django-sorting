@@ -15,7 +15,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Stéphane Raimbault',
     author_email='stephane.raimbault@webstack.fr',
-    url='http://github.com/stephane/django-sorting/',
+    url='http://github.com/webstack/webstack-django-sorting/',
     packages=[
         'webstack_django_sorting',
         'webstack_django_sorting.templatetags',
