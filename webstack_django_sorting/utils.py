@@ -20,9 +20,6 @@ def sort_queryset(queryset, ordering):
             # extract this information if we want to sort on simple object
             # attributes (non-model fields)
             if ordering[0] == '-':
-                if len(ordering) == 1:
-                    raise ValueError('Prefix without fieldname!')
-
                 reverse = True
                 name = ordering[1:]
             else:

@@ -137,7 +137,7 @@ class SortedDataNode(template.Node):
 
         try:
             context[key] = sort_queryset(queryset, ordering)
-        except ValueError:
+        except AttributeError:
             if INVALID_FIELD_RAISES_404:
                 raise Http404(
                     'Invalid field sorting. If DEBUG were set to '
