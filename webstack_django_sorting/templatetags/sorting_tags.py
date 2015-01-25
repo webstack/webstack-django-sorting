@@ -1,9 +1,9 @@
-from operator import attrgetter
-
 from django import template
 from django.conf import settings
 from django.http import Http404
 from django.utils.translation import ugettext as _
+
+from ..utils import sort_queryset
 
 register = template.Library()
 
@@ -126,15 +126,6 @@ class SortedDataNode(template.Node):
         self.queryset_var = template.Variable(queryset_var)
         self.context_var = context_var
 
-    def need_python_sorting(self, queryset, ordering):
-        if ordering.find('__') >= 0:
-            # Python can't sort ordering with '__'
-            return False
-
-        # Python sorting if not a field
-        field = ordering[1:] if ordering[0] == '-' else ordering
-        return field not in queryset.model._meta.get_all_field_names()
-
     def render(self, context):
         if self.context_var is not None:
             key = self.context_var
@@ -144,34 +135,13 @@ class SortedDataNode(template.Node):
         queryset = self.queryset_var.resolve(context)
         ordering = context['request'].field
 
-        if ordering:
-            try:
-                if self.need_python_sorting(queryset, ordering):
-                    # Fallback on pure Python sorting (much slower on large data)
-
-                    # The field name can be prefixed by the minus sign and we need to
-                    # extract this information if we want to sort on simple object
-                    # attributes (non-model fields)
-                    if ordering[0] == '-':
-                        if len(ordering) == 1:
-                            raise template.TemplateSyntaxError
-
-                        reverse = True
-                        name = ordering[1:]
-                    else:
-                        reverse = False
-                        name = ordering
-                    context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
-                else:
-                    context[key] = queryset.order_by(ordering)
-            except template.TemplateSyntaxError:
-                # Seems spurious to me...
-                if INVALID_FIELD_RAISES_404:
-                    raise Http404(
-                        'Invalid field sorting. If DEBUG were set to '
-                        'False, an HTTP 404 page would have been shown instead.')
-                context[key] = queryset
-        else:
+        try:
+            context[key] = sort_queryset(queryset, ordering)
+        except ValueError:
+            if INVALID_FIELD_RAISES_404:
+                raise Http404(
+                    'Invalid field sorting. If DEBUG were set to '
+                    'False, an HTTP 404 page would have been shown instead.')
             context[key] = queryset
 
         return u''
