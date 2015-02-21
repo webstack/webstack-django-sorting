@@ -164,7 +164,7 @@ class SortedDataNode(template.Node):
                     context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
                 else:
                     context[key] = queryset.order_by(ordering)
-            except template.TemplateSyntaxError:
+            except (template.TemplateSyntaxError, AttributeError):
                 # Seems spurious to me...
                 if INVALID_FIELD_RAISES_404:
                     raise Http404(
