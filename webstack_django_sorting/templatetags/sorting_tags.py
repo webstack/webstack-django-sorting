@@ -146,7 +146,7 @@ class SortedDataNode(template.Node):
 
         if ordering:
             try:
-                if queryset.exists() and self.need_python_sorting(queryset, ordering):
+                if self.need_python_sorting(queryset, ordering):
                     # Fallback on pure Python sorting (much slower on large data)
 
                     # The field name can be prefixed by the minus sign and we need to
