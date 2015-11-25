@@ -2,8 +2,12 @@ def get_field(self):
     try:
         field = self.GET['sort']
     except (KeyError, ValueError, TypeError):
-        field = ''
-    return (self.direction == 'desc' and '-' or '') + field
+        field = None
+    if field:
+        return (self.direction == 'desc' and '-' or '') + field
+    # No sort key means default sorting
+    return ''
+
 
 def get_direction(self):
     try:
