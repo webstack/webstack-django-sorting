@@ -1,1 +1,5 @@
 include CONTRIBUTORS.txt LICENSE.txt README.rst
+
+graft webstack_django_sorting
+
+global-exclude *.py[cod] __pycache__ *.so
