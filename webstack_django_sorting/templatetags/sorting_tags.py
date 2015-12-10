@@ -133,7 +133,8 @@ class SortedDataNode(template.Node):
 
         # Python sorting if not a field
         field = ordering[1:] if ordering[0] == '-' else ordering
-        return field not in queryset.model._meta.get_all_field_names()
+        field_names = [f.name for f in queryset.model._meta.get_fields()]
+        return field not in field_names
 
     def render(self, context):
         if self.context_var is not None:
