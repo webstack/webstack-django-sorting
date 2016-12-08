@@ -133,7 +133,13 @@ class SortedDataNode(template.Node):
 
         # Python sorting if not a field
         field = ordering[1:] if ordering[0] == '-' else ordering
-        field_names = [f.name for f in queryset.model._meta.get_fields()]
+
+        if getattr(queryset.model._meta, 'get_fields', False):
+            # Django 1.8+
+            field_names = [f.name for f in queryset.model._meta.get_fields()]
+        else:
+            field_names = queryset.model._meta.get_all_field_names()
+
         return field not in field_names
 
     def render(self, context):
