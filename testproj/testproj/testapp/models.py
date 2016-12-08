@@ -7,7 +7,7 @@ class SecretFile(models.Model):
     order = models.IntegerField(blank=True, null=True)
     size = models.PositiveIntegerField(blank=True, null=True)
     created_on = models.DateTimeField(default=timezone.now)
-    is_secret = models.BooleanField()
+    is_secret = models.BooleanField(default=False)
 
     def __unicode__(self):
         return "#%d %s" % (self.pk, self.filename)
