@@ -1,6 +1,6 @@
 from operator import attrgetter
 
-from django import template
+from django import template, VERSION as DJANGO_VERSION
 from django.conf import settings
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
@@ -134,11 +134,10 @@ class SortedDataNode(template.Node):
         # Python sorting if not a field
         field = ordering[1:] if ordering[0] == '-' else ordering
 
-        if getattr(queryset.model._meta, 'get_fields', False):
-            # Django 1.8+
-            field_names = [f.name for f in queryset.model._meta.get_fields()]
-        else:
+        if DJANGO_VERSION < (1, 8):
             field_names = queryset.model._meta.get_all_field_names()
+        else:
+            field_names = [f.name for f in queryset.model._meta.get_fields()]
 
         return field not in field_names
 
