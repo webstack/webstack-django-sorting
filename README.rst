@@ -5,6 +5,8 @@ How to use webstack-django-sorting
 generation without modifying your views. It is the perfect companion of
 linaro-django-pagination",
 
+*Not yet compatible with Django 1.10, a good opportunity to ditch the middleware!*
+
 There are really 5 steps to setting it up with your projects.
 
 1. List this application in the ``INSTALLED_APPS`` portion of your settings
