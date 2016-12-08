@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
+import codecs
+
 try:
     from setuptools import setup
 except ImportError:
@@ -12,7 +14,7 @@ setup(
     name='webstack-django-sorting',
     version=__version__,
     description="Easy sorting of tables with Django",
-    long_description=open('README.rst').read(),
+    long_description=codecs.open('README.rst', 'r', 'utf-8').read(),
     author='Stéphane Raimbault',
     author_email='stephane.raimbault@webstack.fr',
     url='http://github.com/webstack/webstack-django-sorting/',
