@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 from django.contrib import admin
+from testproj.testapp import views
 
-admin.autodiscover()
-
-urlpatterns = patterns('',
-    url(r'^$', 'testproj.testapp.views.test_index'),
-    url(r'^admin/', include(admin.site.urls)),
-)
+urlpatterns = [
+    url(r'^$', views.test_index),
+    url(r'^admin/', admin.site.urls),
+]

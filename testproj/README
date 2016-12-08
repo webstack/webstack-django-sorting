@@ -1,4 +1,6 @@
-1. Create a virtualenv
-2. pip install django webstack_django_sorting
-3. ./manage.py syncdb
-4. ./manage.py runserver
+1. Create a virtualenv (mkvirtualenv)
+2. pip install -r requirements.txt
+3  pip install -e ..
+4. ./manage.py migrate
+5. ./manage.py loaddata secretfiles
+6. ./manage.py runserver
