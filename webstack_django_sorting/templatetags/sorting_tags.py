@@ -152,25 +152,29 @@ class SortedDataNode(template.Node):
 
         if ordering:
             try:
-                if self.need_python_sorting(queryset, ordering):
-                    # Fallback on pure Python sorting (much slower on large data)
-
-                    # The field name can be prefixed by the minus sign and we need to
-                    # extract this information if we want to sort on simple object
-                    # attributes (non-model fields)
-                    if ordering[0] == '-':
-                        if len(ordering) == 1:
-                            raise template.TemplateSyntaxError
-
-                        reverse = True
-                        name = ordering[1:]
+                if queryset.exists():
+                    if self.need_python_sorting(queryset, ordering):
+                        # Fallback on pure Python sorting (much slower on large data)
+    
+                        # The field name can be prefixed by the minus sign and we need to
+                        # extract this information if we want to sort on simple object
+                        # attributes (non-model fields)
+                        if ordering[0] == '-':
+                            if len(ordering) == 1:
+                                raise template.TemplateSyntaxError
+    
+                            reverse = True
+                            name = ordering[1:]
+                        else:
+                            reverse = False
+                            name = ordering
+                        if hasattr(queryset[0], name):
+                            context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
+                        else:
+                            raise AttributeError()
                     else:
-                        reverse = False
-                        name = ordering
-                    context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
-                else:
-                    context[key] = queryset.order_by(ordering)
-            except template.TemplateSyntaxError:
+                        context[key] = queryset.order_by(ordering)
+            except (template.TemplateSyntaxError, AttributeError):
                 # Seems spurious to me...
                 if INVALID_FIELD_RAISES_404:
                     raise Http404(
