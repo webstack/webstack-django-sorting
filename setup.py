@@ -8,7 +8,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = '0.4.3'
+__version__ = '0.5.0'
 
 setup(
     name='webstack-django-sorting',
