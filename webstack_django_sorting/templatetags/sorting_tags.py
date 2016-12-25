@@ -1,9 +1,12 @@
+# coding: utf-8
 from operator import attrgetter
 
 from django import template, VERSION as DJANGO_VERSION
 from django.conf import settings
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
+from webstack_django_sorting.util import get_sort_field
+
 
 register = template.Library()
 
@@ -13,8 +16,8 @@ INVALID_FIELD_RAISES_404 = getattr(settings, 'SORTING_INVALID_FIELD_RAISES_404',
 
 sort_directions = {
     'asc': {'icon': DEFAULT_SORT_UP, 'inverse': 'desc'},
-    'desc': {'icon': DEFAULT_SORT_DOWN, 'inverse': 'asc'},
-    '': {'icon': DEFAULT_SORT_DOWN, 'inverse': 'asc'},
+    'desc': {'icon': DEFAULT_SORT_DOWN, 'inverse': ''},
+    '': {'icon': '', 'inverse': 'asc'},
 }
 
 
@@ -85,7 +88,11 @@ class SortAnchorNode(template.Node):
             getvars['dir'] = sortdir['inverse']
             icon = sortdir['icon']
         else:
+            getvars['dir'] = 'asc'
             icon = ''
+
+        if getvars['dir'] == '':
+            getvars.pop('dir', None)
 
         if len(getvars.keys()) > 0:
             urlappend = "&%s" % getvars.urlencode()
@@ -97,7 +104,10 @@ class SortAnchorNode(template.Node):
         else:
             title = self.title
 
-        url = '%s?sort=%s%s' % (request.path, self.field, urlappend)
+        if 'dir' in getvars:
+            url = '%s?sort=%s%s' % (request.path, self.field, urlappend)
+        else:
+            url = '%s%s%s' % (request.path, '?' if urlappend else '', urlappend)
         return '<a href="%s" title="%s">%s</a>' % (url, self.title, title)
 
 
@@ -148,29 +158,33 @@ class SortedDataNode(template.Node):
             key = self.queryset_var.var
 
         queryset = self.queryset_var.resolve(context)
-        ordering = context['request'].field
+        ordering = get_sort_field(context['request'])
 
         if ordering:
             try:
-                if self.need_python_sorting(queryset, ordering):
-                    # Fallback on pure Python sorting (much slower on large data)
+                if queryset.exists():
+                    if self.need_python_sorting(queryset, ordering):
+                        # Fallback on pure Python sorting (much slower on large data)
 
-                    # The field name can be prefixed by the minus sign and we need to
-                    # extract this information if we want to sort on simple object
-                    # attributes (non-model fields)
-                    if ordering[0] == '-':
-                        if len(ordering) == 1:
-                            raise template.TemplateSyntaxError
+                        # The field name can be prefixed by the minus sign and we need to
+                        # extract this information if we want to sort on simple object
+                        # attributes (non-model fields)
+                        if ordering[0] == '-':
+                            if len(ordering) == 1:
+                                raise template.TemplateSyntaxError
 
-                        reverse = True
-                        name = ordering[1:]
+                            reverse = True
+                            name = ordering[1:]
+                        else:
+                            reverse = False
+                            name = ordering
+                        if hasattr(queryset[0], name):
+                            context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
+                        else:
+                            raise AttributeError()
                     else:
-                        reverse = False
-                        name = ordering
-                    context[key] = sorted(queryset, key=attrgetter(name), reverse=reverse)
-                else:
-                    context[key] = queryset.order_by(ordering)
-            except template.TemplateSyntaxError:
+                        context[key] = queryset.order_by(ordering)
+            except (template.TemplateSyntaxError, AttributeError):
                 # Seems spurious to me...
                 if INVALID_FIELD_RAISES_404:
                     raise Http404(
