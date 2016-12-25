@@ -5,7 +5,6 @@ How to use webstack-django-sorting
 generation without modifying your views. It is the perfect companion of
 linaro-django-pagination",
 
-*Not yet compatible with Django 1.10, a good opportunity to ditch the middleware!*
 
 There are really 5 steps to setting it up with your projects.
 
@@ -17,15 +16,7 @@ There are really 5 steps to setting it up with your projects.
            'webstack_django_sorting',
        )
 
-2. Install the sorting middleware. Your settings file might look something
-   like::
-
-       MIDDLEWARE_CLASSES = (
-           # ...
-           'webstack_django_sorting.middleware.SortingMiddleware',
-       )
-
-3. If it's not already added in your setup, add the 'request' context processor::
+2. If it's not already added in your setup, add the 'request' context processor::
 
        TEMPLATE_CONTEXT_PROCESSORS = (
            'django.contrib.auth.context_processors.auth',
@@ -42,16 +33,16 @@ There are really 5 steps to setting it up with your projects.
    version which context processors are supported (see ``global_settings.py``
    file of your Django installation).
 
-4. Add this line at the top of your template to load the sorting tags::
+3. Add this line at the top of your template to load the sorting tags::
 
        {% load sorting_tags %}
 
-5. Decide on a variable that you would like to sort, and use the
+4. Decide on a variable that you would like to sort, and use the
    autosort tag on that variable before iterating over it::
 
        {% autosort object_list %}
 
-6. Now, you want to display different headers with links to sort
+5. Now, you want to display different headers with links to sort
    your objects_list::
 
        <tr>
