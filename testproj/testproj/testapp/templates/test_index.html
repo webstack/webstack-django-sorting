@@ -1,27 +1,66 @@
 {% load sorting_tags %}
 
 <html>
-  <h2>List of files</h2>
+  <head>
+    <style>
+      body {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        line-height: 1.42857143;
+        color: #333;
+      }
 
-  {% autosort secret_files %}
-  <table>
-    <tr>
-      <th>{% anchor id "ID" %}</th>
-      <th>{% anchor filename "Filename" %}</th>
-      <th>{% anchor created_on "Date" %}</th>
-      <th>{% anchor size "Size" %}</th>
-      <th>{% anchor order "Order" %}</th>
-      <th>{% anchor is_secret "Secret?" %}</th>
-    </tr>
-    {% for secret_file in secret_files %}
-    <tr>
-      <td>{{ secret_file.id }}</td>
-      <td>{{ secret_file.filename }}</td>
-      <td>{{ secret_file.created_on }}</td>
-      <td>{{ secret_file.size }}</td>
-      <td>{{ secret_file.order }}</td>
-      <td>{{ secret_file.is_secret|yesno }}</td>
-    </tr>
-    {% endfor %}
-  </table>
+      table {
+        border-spacing: 0;
+        border-collapse: collapse;
+      }
+
+      thead>tr>th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #ddd;
+        text-align: left;
+      }
+
+      thead>tr>th>a {
+        text-decoration: none;
+      }
+
+      thead>tr>th>a:visited {
+        color: inherit;
+      }
+
+      tr>th, tr>td {
+        padding: 8px;
+        line-height: 1.42857143;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>List of files</h2>
+
+    {% autosort secret_files %}
+    <table>
+      <thead>
+        <tr>
+          <th>{% anchor id "ID" %}</th>
+          <th>{% anchor filename "Filename" %}</th>
+          <th>{% anchor created_on "Date" %}</th>
+          <th>{% anchor size "Size" %}</th>
+          <th>{% anchor order "Order" %}</th>
+          <th>{% anchor is_secret "Secret?" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for secret_file in secret_files %}
+        <tr>
+          <td>{{ secret_file.id }}</td>
+          <td>{{ secret_file.filename }}</td>
+          <td>{{ secret_file.created_on }}</td>
+          <td>{{ secret_file.size }}</td>
+          <td>{{ secret_file.order }}</td>
+          <td>{{ secret_file.is_secret|yesno }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
 </html>
