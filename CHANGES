@@ -1,6 +1,15 @@
 Webstack-django-sorting Changelog
 =================================
 
+Version 1.0.0
+-------------
+
+unreleased
+
+- Now switching between ascending, descending, and no sorting
+- Removed webstack_django_sorting.middleware.SortingMiddleware
+- Fixed sorting on edge cases
+
 Version 0.5.0
 -------------
 
