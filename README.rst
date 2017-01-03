@@ -10,14 +10,14 @@ To upgrade to ``webstack-django-sorting`` v1.0.0+, you must remove the old middl
 
 The 5 steps to use ``webstack-django-sorting`` in your Django project:
 
-1. Add the application to the ``INSTALLED_APPS`` list:
+1. Add the application to the ``INSTALLED_APPS`` list::
 
        INSTALLED_APPS = [
            # ...
            'webstack_django_sorting',
        ]
 
-2. Check the request context processor is loaded in ``TEMPLATES`` options:
+2. Check the request context processor is loaded in ``TEMPLATES`` options::
 
        TEMPLATES = [
            {
