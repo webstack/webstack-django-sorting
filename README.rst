@@ -3,7 +3,7 @@ How to use webstack-django-sorting
 
 ``webstack-django-sorting`` allows for easy sorting, and sorting links
 generation without modifying your views. It is the perfect companion of
-linaro-django-pagination",
+`django-pagination <https://github.com/zyga/django-pagination>`_.
 
 To upgrade to ``webstack-django-sorting`` v1.0.0+, you must remove the old middleware
 ``webstack_django_sorting.middleware.SortingMiddleware`` from ``MIDDLEWARE_CLASSES`` list.
