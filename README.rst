@@ -5,33 +5,34 @@ How to use webstack-django-sorting
 generation without modifying your views. It is the perfect companion of
 linaro-django-pagination",
 
+To upgrade to ``webstack-django-sorting`` v1.0.0+, you must remove the old middleware
+``webstack_django_sorting.middleware.SortingMiddleware`` from ``MIDDLEWARE_CLASSES`` list.
 
-There are really 5 steps to setting it up with your projects.
+The 5 steps to use ``webstack-django-sorting`` in your Django project:
 
-1. List this application in the ``INSTALLED_APPS`` portion of your settings
-   file.  Your settings file might look something like::
+1. Add the application to the ``INSTALLED_APPS`` list:
 
-       INSTALLED_APPS = (
+       INSTALLED_APPS = [
            # ...
            'webstack_django_sorting',
-       )
+       ]
 
-2. If it's not already added in your setup, add the 'request' context processor::
+2. Check the request context processor is loaded in ``TEMPLATES`` options:
 
-       TEMPLATE_CONTEXT_PROCESSORS = (
-           'django.contrib.auth.context_processors.auth',
-           'django.core.context_processors.debug',
-           'django.core.context_processors.i18n',
-           'django.core.context_processors.media',
-           'django.core.context_processors.static',
-           'django.core.context_processors.tz',
-           'django.core.context_processors.request',
-           'django.contrib.messages.context_processors.messages',
-       )
-
-   This example comes from Django 1.6, take care to check against your Django
-   version which context processors are supported (see ``global_settings.py``
-   file of your Django installation).
+       TEMPLATES = [
+           {
+               'BACKEND': 'django.template.backends.django.DjangoTemplates',
+               'DIRS': [],
+               'APP_DIRS': True,
+               'OPTIONS': {
+                   'context_processors': [
+                       # ...
+                       'django.template.context_processors.request',
+                       # ...
+                   ],
+               },
+           },
+       ]
 
 3. Add this line at the top of your template to load the sorting tags::
 
