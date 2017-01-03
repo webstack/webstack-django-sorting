@@ -1,0 +1,19 @@
+Webstack-django-sorting Changelog
+=================================
+
+Version 0.5.0
+-------------
+
+Unreleased
+
+- Restore compatibility with Django v1.8 and lower
+- Fix reading of README.rst with Python 3
+- Cleanup in test project
+
+Version 0.4.3
+-------------
+
+Released on December 10th 2016
+
+- Compatibility with Django v1.9
+- Better MANIFEST.in
