@@ -5,7 +5,8 @@ from django import template, VERSION as DJANGO_VERSION
 from django.conf import settings
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
-from webstack_django_sorting.util import get_sort_field
+
+from ..util import get_sort_field
 
 
 register = template.Library()
