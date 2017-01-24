@@ -1,7 +1,9 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class SecretFile(models.Model):
     filename = models.CharField(max_length=255, blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
@@ -9,5 +11,5 @@ class SecretFile(models.Model):
     created_on = models.DateTimeField(default=timezone.now)
     is_secret = models.BooleanField(default=False)
 
-    def __unicode__(self):
-        return "#%d %s" % (self.pk, self.filename)
+    def __str__(self):
+        return "#%d %s" % (self.order, self.filename)
