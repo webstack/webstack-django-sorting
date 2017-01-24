@@ -1,28 +1,45 @@
 webstack-django-sorting
 =======================
 
-``webstack-django-sorting`` allows for easy sorting of data tables and it
-provides sorting links for table headers. It is the perfect
-companion of `django-pagination <https://github.com/zyga/django-pagination>`_.
+What?
+-----
+
+``webstack-django-sorting`` is a Django app which allows for easy sorting of
+data tables. You don't need to change anything to your views to use it. It
+provides sorting links for table headers. It is the perfect companion of
+`django-pagination <https://github.com/zyga/django-pagination>`_.
 
 A demonstration of the features is provided in `testproj` directory.
+
+Features
+--------
+
+- Django ORM or Python sorting
+- Switches between ascending, descending, and no sorting
+- Provides links to sort on different criterions
+- Visual feedback on applied ordering
+- Supports Python 2.7, 3.5 and 3.6
+- Supports translation of link titles
+
+Upgrade from v0.5.0 and below
+-----------------------------
 
 To upgrade to ``webstack-django-sorting`` v1.0.0+, you must remove the old middleware
 ``webstack_django_sorting.middleware.SortingMiddleware`` from ``MIDDLEWARE_CLASSES`` list.
 
-How to install it in your project
+How to use it in your project
 ---------------------------------
 
-The 5 steps to use ``webstack-django-sorting`` in your Django project:
+1. ``pip install webstack_django_sorting``
 
-1. Add the application to the ``INSTALLED_APPS`` list::
+2. Add the application to the ``INSTALLED_APPS`` list::
 
        INSTALLED_APPS = [
            # ...
            'webstack_django_sorting',
        ]
 
-2. Check the request context processor is loaded in ``TEMPLATES`` options::
+3. Check the request context processor is loaded in ``TEMPLATES`` options::
 
        TEMPLATES = [
            {
@@ -39,16 +56,16 @@ The 5 steps to use ``webstack-django-sorting`` in your Django project:
            },
        ]
 
-3. Add this line at the top of your template to load the sorting tags::
+4. Add this line at the top of your template to load the sorting tags::
 
        {% load sorting_tags %}
 
-4. Decide on a variable that you would like to sort, and use the
+5. Decide on a variable that you would like to sort, and use the
    autosort tag on that variable before iterating over it::
 
        {% autosort object_list %}
 
-5. Now, you want to display different headers with links to sort
+6. Now, you want to display different headers with links to sort
    your objects_list::
 
        <tr>
