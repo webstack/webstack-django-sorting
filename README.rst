@@ -1,12 +1,17 @@
-How to use webstack-django-sorting
-----------------------------------
+webstack-django-sorting
+=======================
 
-``webstack-django-sorting`` allows for easy sorting, and sorting links
-generation without modifying your views. It is the perfect companion of
-`django-pagination <https://github.com/zyga/django-pagination>`_.
+``webstack-django-sorting`` allows for easy sorting of data tables and it
+provides sorting links for table headers. It is the perfect
+companion of `django-pagination <https://github.com/zyga/django-pagination>`_.
+
+A demonstration of the features is provided in `testproj` directory.
 
 To upgrade to ``webstack-django-sorting`` v1.0.0+, you must remove the old middleware
 ``webstack_django_sorting.middleware.SortingMiddleware`` from ``MIDDLEWARE_CLASSES`` list.
+
+How to install it in your project
+---------------------------------
 
 The 5 steps to use ``webstack-django-sorting`` in your Django project:
 
