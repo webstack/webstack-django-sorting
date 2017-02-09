@@ -180,6 +180,8 @@ class SortedDataNode(template.Node):
             else:
                 return queryset.order_by(ordering)
 
+        return queryset
+
     def render(self, context):
         if self.context_var is not None:
             key = self.context_var
