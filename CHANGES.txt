@@ -1,6 +1,14 @@
 Webstack-django-sorting Changelog
 =================================
 
+Version 1.0.1
+-------------
+
+Released on March 1st 2017
+
+- Improved README
+- Don't return None when queryset is empty (closes #8)
+
 Version 1.0.0
 -------------
 
