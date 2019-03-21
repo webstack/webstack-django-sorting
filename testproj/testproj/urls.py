@@ -1,8 +1,8 @@
-from django.conf.urls import url
 from django.contrib import admin
+from django.urls import path
 from testproj.testapp import views
 
 urlpatterns = [
-    url(r"", views.test_index, name="test_index"),
-    url(r"^admin/", admin.site.urls),
+    path("", views.test_index, name="test_index"),
+    path("admin/", admin.site.urls),
 ]

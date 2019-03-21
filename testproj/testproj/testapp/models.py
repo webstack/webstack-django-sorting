@@ -1,9 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 
 
-@python_2_unicode_compatible
 class SecretFile(models.Model):
     filename = models.CharField(max_length=255, blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
