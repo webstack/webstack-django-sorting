@@ -32,6 +32,7 @@ def anchor(parser, token):
         raise template.TemplateSyntaxError("anchor tag takes at least 1 argument.")
 
     title_is_var = False
+    translate_title = False
     try:
         title = bits[2]
         if title[0] in ('"', "'"):
@@ -42,13 +43,13 @@ def anchor(parser, token):
                     'anchor tag title must be a "string", _("trans string"), or variable'
                 )
         elif title.startswith('_("') or title.startswith("_('"):
-            title = _(title[3:-2])
+            translate_title = True
         else:
             title_is_var = True
     except IndexError:
         title = bits[1].capitalize()
 
-    return SortAnchorNode(bits[1].strip(), title.strip(), title_is_var)
+    return SortAnchorNode(bits[1].strip(), title.strip(), title_is_var, translate_title)
 
 
 class SortAnchorNode(template.Node):
@@ -64,14 +65,19 @@ class SortAnchorNode(template.Node):
 
     """
 
-    def __init__(self, field, title, title_is_var):
+    def __init__(self, field, title, title_is_var, translate_title):
         self.field = field
         self.title = title
         self.title_is_var = title_is_var
+        self.translate_title = translate_title
 
     def render(self, context):
         if self.title_is_var:
-            self.title = context[self.title]
+            display_title = context[self.title]
+        elif self.translate_title:
+            display_title = _(self.title[3:-2])
+        else:
+            display_title = self.title
         request = context["request"]
         getvars = request.GET.copy()
 
@@ -103,15 +109,15 @@ class SortAnchorNode(template.Node):
             urlappend = ""
 
         if icon:
-            title = "%s %s" % (self.title, icon)
+            title = "%s %s" % (display_title, icon)
         else:
-            title = self.title
+            title = display_title
 
         if "dir" in getvars:
             url = "%s?sort=%s%s" % (request.path, self.field, urlappend)
         else:
             url = "%s%s%s" % (request.path, "?" if urlappend else "", urlappend)
-        return '<a href="%s" title="%s">%s</a>' % (url, self.title, title)
+        return '<a href="%s" title="%s">%s</a>' % (url, display_title, title)
 
 
 def autosort(parser, token):
