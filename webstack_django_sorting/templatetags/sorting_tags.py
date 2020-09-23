@@ -32,7 +32,7 @@ def anchor(parser, token):
         raise template.TemplateSyntaxError("anchor tag takes at least 1 argument.")
 
     title_is_var = False
-    translate_title = False
+    title_is_translatable = False
     try:
         title = bits[2]
         if title[0] in ('"', "'"):
@@ -43,13 +43,15 @@ def anchor(parser, token):
                     'anchor tag title must be a "string", _("trans string"), or variable'
                 )
         elif title.startswith('_("') or title.startswith("_('"):
-            translate_title = True
+            title_is_translatable = True
         else:
             title_is_var = True
     except IndexError:
         title = bits[1].capitalize()
 
-    return SortAnchorNode(bits[1].strip(), title.strip(), title_is_var, translate_title)
+    return SortAnchorNode(
+        bits[1].strip(), title.strip(), title_is_var, title_is_translatable
+    )
 
 
 class SortAnchorNode(template.Node):
@@ -65,16 +67,16 @@ class SortAnchorNode(template.Node):
 
     """
 
-    def __init__(self, field, title, title_is_var, translate_title):
+    def __init__(self, field, title, title_is_var, title_is_translatable):
         self.field = field
         self.title = title
         self.title_is_var = title_is_var
-        self.translate_title = translate_title
+        self.title_is_translatable = title_is_translatable
 
     def render(self, context):
         if self.title_is_var:
             display_title = context[self.title]
-        elif self.translate_title:
+        elif self.title_is_translatable:
             display_title = _(self.title[3:-2])
         else:
             display_title = self.title
