@@ -1,16 +1,24 @@
 Webstack-django-sorting Changelog
 =================================
 
-Version 1.0.1
--------------
+v1.0.2
+------
+
+Released on September 23th 2020
+
+- Fix cache issue with translatable anchors. Thanks Kim Wong.
+- Updated README.md
+
+v1.0.1
+------
 
 Released on March 1st 2017
 
 - Improved README
 - Don't return None when queryset is empty (closes #8)
 
-Version 1.0.0
--------------
+v1.0.0
+------
 
 Released on January 24th 2017
 
@@ -21,8 +29,8 @@ Released on January 24th 2017
 - Improved Python 3 support
 - Add first tests
 
-Version 0.5.0
--------------
+v0.5.0
+------
 
 Released on January 3rd 2017
 
@@ -30,8 +38,8 @@ Released on January 3rd 2017
 - Fix reading of README.rst with Python 3
 - Cleanup in test project
 
-Version 0.4.3
--------------
+v0.4.3
+------
 
 Released on December 10th 2016
 
