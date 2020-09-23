@@ -6,7 +6,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 
 def get_long_description():
