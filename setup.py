@@ -14,7 +14,7 @@ setup(
     name="webstack-django-sorting",
     version=__version__,
     description="Easy sorting of tables with Django",
-    long_description=codecs.open("README.rst", "r", "utf-8").read(),
+    long_description=codecs.open("README.md", "r", "utf-8").read(),
     author="Stéphane Raimbault",
     author_email="stephane.raimbault@webstack.fr",
     url="http://github.com/webstack/webstack-django-sorting/",
