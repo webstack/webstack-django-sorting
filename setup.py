@@ -35,10 +35,10 @@ setup(
         "Framework :: Django",
         "Environment :: Web Environment",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
-    install_requires=["Django>=1.0"],
+    install_requires=["Django>=3.0"],
 )

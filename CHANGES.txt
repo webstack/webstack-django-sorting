@@ -1,5 +1,11 @@
 Webstack-django-sorting Changelog
 =================================
+v2.0.0
+------
+
+Under development
+
+- Remove support of Python 2
 
 v1.0.2
 ------
