@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from testproj.testapp import models
+from . import models
 
 
 def secret_list(request):
