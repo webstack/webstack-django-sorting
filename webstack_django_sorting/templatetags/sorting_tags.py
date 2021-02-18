@@ -1,4 +1,3 @@
-# coding: utf-8
 from operator import attrgetter
 
 from django import template, VERSION as DJANGO_VERSION

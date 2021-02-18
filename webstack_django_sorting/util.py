@@ -1,6 +1,3 @@
-# coding: utf-8
-
-
 def get_sort_field(request):
     """
     Retrieve field used for sorting a queryset
