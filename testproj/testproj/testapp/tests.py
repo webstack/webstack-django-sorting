@@ -7,11 +7,11 @@ from . import models
 class IndexTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.url = reverse("test_index")
+        self.url = reverse("secret_list")
         models.SecretFile.objects.create(filename="foo.txt", order=1, size=1024)
         models.SecretFile.objects.create(filename="bar.txt", order=2, size=512)
 
-    def test_index(self):
+    def test_list(self):
         response = self.client.get(self.url)
         self.assertContains(response, "foo.txt")
         self.assertContains(response, "bar.txt")

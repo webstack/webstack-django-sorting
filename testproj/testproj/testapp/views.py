@@ -3,7 +3,7 @@ from django.shortcuts import render
 from testproj.testapp import models
 
 
-def test_index(request):
+def secret_list(request):
     return render(
-        request, "test_index.html", {"secret_files": models.SecretFile.objects.all()}
+        request, "secret_list.html", {"secret_files": models.SecretFile.objects.all()}
     )
