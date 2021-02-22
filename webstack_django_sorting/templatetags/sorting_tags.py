@@ -4,8 +4,8 @@ from django import template
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
-from .settings import INVALID_FIELD_RAISES_404, SORT_DIRECTIONS
-from ..util import get_sort_field
+from ..settings import INVALID_FIELD_RAISES_404, SORT_DIRECTIONS
+from ..utils import get_sort_field
 
 
 register = template.Library()
