@@ -8,5 +8,4 @@ def get_sort_field(request):
     sort_direction = request.GET.get("dir")
     field_name = (request.GET.get("sort") or "") if sort_direction else ""
     sort_sign = "-" if sort_direction == "desc" else ""
-    result_field = "{sign}{field}".format(sign=sort_sign, field=field_name)
-    return result_field
+    return f"{sort_sign}{field_name}"
