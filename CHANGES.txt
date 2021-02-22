@@ -1,11 +1,13 @@
 Webstack-django-sorting Changelog
 =================================
+
 v2.0.0
 ------
 
 Under development
 
-- Remove support of Python 2
+- Python v3.6+ only
+- Remove support of Django <1.8
 
 v1.0.2
 ------
