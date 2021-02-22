@@ -1,11 +1,10 @@
 from operator import attrgetter
 
 from django import template, VERSION as DJANGO_VERSION
-from django.conf import settings
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
-from .settings import SORT_DIRECTIONS
+from .settings import INVALID_FIELD_RAISES_404, SORT_DIRECTIONS
 from ..util import get_sort_field
 
 
@@ -198,8 +197,8 @@ class SortedDataNode(template.Node):
         except (template.TemplateSyntaxError, AttributeError):
             if INVALID_FIELD_RAISES_404:
                 raise Http404(
-                    "Invalid field sorting. If DEBUG were set to "
-                    "False, an HTTP 404 page would have been shown instead."
+                    "Invalid field sorting. If INVALID_FIELD_RAISES_404 were set to "
+                    "False, the error would have been ignored."
                 )
             context[key] = queryset
 
