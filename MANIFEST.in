@@ -1,4 +1,4 @@
-include CHANGES.txt CONTRIBUTORS.txt LICENSE.txt README.md
+include CHANGES.md CONTRIBUTORS.txt LICENSE.txt README.md
 
 graft webstack_django_sorting
 
