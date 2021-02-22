@@ -5,20 +5,11 @@ from django.conf import settings
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
+from .settings import SORT_DIRECTIONS
 from ..util import get_sort_field
 
 
 register = template.Library()
-
-DEFAULT_SORT_UP = getattr(settings, "DEFAULT_SORT_UP", "&uarr;")
-DEFAULT_SORT_DOWN = getattr(settings, "DEFAULT_SORT_DOWN", "&darr;")
-INVALID_FIELD_RAISES_404 = getattr(settings, "SORTING_INVALID_FIELD_RAISES_404", False)
-
-sort_directions = {
-    "asc": {"icon": DEFAULT_SORT_UP, "inverse": "desc"},
-    "desc": {"icon": DEFAULT_SORT_DOWN, "inverse": ""},
-    "": {"icon": "", "inverse": "asc"},
-}
 
 
 def anchor(parser, token):
@@ -89,10 +80,10 @@ class SortAnchorNode(template.Node):
             sortby = ""
 
         if "dir" in getvars:
-            sortdir = sort_directions.get(getvars["dir"], sort_directions[""])
+            sortdir = SORT_DIRECTIONS.get(getvars["dir"], SORT_DIRECTIONS[""])
             del getvars["dir"]
         else:
-            sortdir = sort_directions[""]
+            sortdir = SORT_DIRECTIONS[""]
 
         if sortby == self.field:
             getvars["dir"] = sortdir["inverse"]
