@@ -95,26 +95,26 @@ class SortAnchorNode(template.Node):
             getvars.pop("dir", None)
 
         if len(getvars.keys()) > 0:
-            urlappend = "&%s" % getvars.urlencode()
+            url_append = f"&{getvars.urlencode()}"
         else:
-            urlappend = ""
+            url_append = ""
 
         if icon:
-            title = "%s %s" % (display_title, icon)
+            title = f"{display_title} {icon}"
         else:
             title = display_title
 
         if "dir" in getvars:
-            url = "%s?sort=%s%s" % (request.path, self.field, urlappend)
+            url = f"{request.path}?sort={self.field}{url_append}"
         else:
-            url = "%s%s%s" % (request.path, "?" if urlappend else "", urlappend)
-        return '<a href="%s" title="%s">%s</a>' % (url, display_title, title)
+            url = f"{request.path}{'?' + url_append if url_append else ''}"
+        return f'<a href="{url}" title="{display_title}">{title}</a>'
 
 
 def autosort(parser, token):
     bits = [b.strip("\"'") for b in token.split_contents()]
     help_msg = (
-        u"autosort tag synopsis: {%% autosort queryset [as " u"context_variable] %%}"
+        "autosort tag synopsis: {%% autosort queryset [as " "context_variable] %%}"
     )
     context_var = None
 
@@ -202,7 +202,7 @@ class SortedDataNode(template.Node):
                 )
             context[key] = queryset
 
-        return u""
+        return ""
 
 
 anchor = register.tag(anchor)
