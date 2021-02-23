@@ -1,11 +1,9 @@
-from operator import attrgetter
-
 from django import template
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
 from ..settings import INVALID_FIELD_RAISES_404
-from ..utils import get_sort_field, render_sort_anchor
+from ..utils import get_order_by_from_request, render_sort_anchor, sort_queryset
 
 
 register = template.Library()
@@ -100,46 +98,6 @@ class SortedDataNode(template.Node):
         self.queryset_var = template.Variable(queryset_var)
         self.context_var = context_var
 
-    def need_python_sorting(self, queryset, ordering):
-        if ordering.find("__") >= 0:
-            # Python can't sort ordering with '__'
-            return False
-
-        # Python sorting if not a field
-        field = ordering[1:] if ordering[0] == "-" else ordering
-        field_names = [f.name for f in queryset.model._meta.get_fields()]
-        return field not in field_names
-
-    def sort_queryset(self, queryset, ordering):
-        if not ordering:
-            return queryset
-
-        if queryset.exists():
-            if self.need_python_sorting(queryset, ordering):
-                # Fallback on pure Python sorting (much slower on large data)
-
-                # The field name can be prefixed by the minus sign and we need to
-                # extract this information if we want to sort on simple object
-                # attributes (non-model fields)
-                if ordering[0] == "-":
-                    if len(ordering) == 1:
-                        # Prefix without field name
-                        raise template.TemplateSyntaxError
-
-                    reverse = True
-                    name = ordering[1:]
-                else:
-                    reverse = False
-                    name = ordering
-                if hasattr(queryset[0], name):
-                    return sorted(queryset, key=attrgetter(name), reverse=reverse)
-                else:
-                    raise AttributeError()
-            else:
-                return queryset.order_by(ordering)
-
-        return queryset
-
     def render(self, context):
         if self.context_var is not None:
             key = self.context_var
@@ -147,11 +105,13 @@ class SortedDataNode(template.Node):
             key = self.queryset_var.var
 
         queryset = self.queryset_var.resolve(context)
-        ordering = get_sort_field(context["request"])
+        order_by = get_order_by_from_request(context["request"])
 
         try:
-            context[key] = self.sort_queryset(queryset, ordering)
-        except (template.TemplateSyntaxError, AttributeError):
+            context[key] = sort_queryset(queryset, order_by)
+        except ValueError as e:
+            raise template.TemplateSyntaxError from e
+        except AttributeError:
             if INVALID_FIELD_RAISES_404:
                 raise Http404(
                     "Invalid field sorting. If INVALID_FIELD_RAISES_404 were set to "
