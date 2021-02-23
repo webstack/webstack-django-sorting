@@ -7,6 +7,11 @@ data tables. You don't need to change anything to your views to use it. It
 provides sorting links for table headers. It is the perfect companion of
 [django-pagination](https://github.com/zyga/django-pagination).
 
+There are other powerful projects to sort tables such as
+[django-tables2](https://django-tables2.readthedocs.io/) but I don't like the
+high level `render_table` tag because it requires to define the CSS in
+`Table` classes or to write custom templates.
+
 A demonstration of the features is provided in `testproj` directory.
 
 ## Features
@@ -24,9 +29,15 @@ To upgrade to `webstack-django-sorting` v1.0.0+, you must remove the old middlew
 
 ## How to use it in your project
 
-1. `pip install webstack_django_sorting`
+The provide is available on PyPI:
 
-2. Add the application to the `INSTALLED_APPS` list:
+    pip install webstack_django_sorting
+
+The project provides examples of integration with Django and Jinja2 templates.
+
+## For Django templates
+
+1. Add the application to the `INSTALLED_APPS` list:
 
     ```python
        INSTALLED_APPS = [
@@ -35,11 +46,7 @@ To upgrade to `webstack-django-sorting` v1.0.0+, you must remove the old middlew
        ]
     ```
 
-The project provides examples of integration with Django and Jinja2 templates.
-
-## For Django templates
-
-1. Check the request context processor is loaded in `TEMPLATES` options:
+2. Check the request context processor is loaded in `TEMPLATES` options:
 
     ```python
        TEMPLATES = [
@@ -58,16 +65,16 @@ The project provides examples of integration with Django and Jinja2 templates.
        ]
     ```
 
-2. Add this line at the top of your template to load the sorting tags:
+3. Add this line at the top of your template to load the sorting tags:
 
        {% load sorting_tags %}
 
-3. Decide on a variable that you would like to sort, and use the
+4. Decide on a variable that you would like to sort, and use the
    autosort tag on that variable before iterating over it:
 
        {% autosort object_list %}
 
-4. Now, you want to display different headers with links to sort
+5. Now, you want to display different headers with links to sort
    your objects_list:
 
     ```html
