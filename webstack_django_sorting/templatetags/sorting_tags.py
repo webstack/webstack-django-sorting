@@ -1,4 +1,5 @@
 from operator import attrgetter
+from urllib.parse import urlencode
 
 from django import template
 from django.http import Http404
@@ -70,45 +71,33 @@ class SortAnchorNode(template.Node):
         else:
             display_title = self.title
         request = context["request"]
-        getvars = request.GET.copy()
 
-        if "sort" in getvars:
-            sortby = getvars["sort"]
-            del getvars["sort"]
-        else:
-            sortby = ""
+        sort_by = request.GET.get("sort", "")
 
-        if "dir" in getvars:
-            sortdir = SORT_DIRECTIONS.get(getvars["dir"], SORT_DIRECTIONS[""])
-            del getvars["dir"]
+        if sort_by == self.field:
+            # Render anchor link to next direction
+            sort_direction = SORT_DIRECTIONS[request.GET.get("dir", "")]
+            next_direction_code = sort_direction["next"]
+            icon = sort_direction["icon"]
         else:
-            sortdir = SORT_DIRECTIONS[""]
-
-        if sortby == self.field:
-            getvars["dir"] = sortdir["next"]
-            icon = sortdir["icon"]
-        else:
-            getvars["dir"] = "asc"
+            # Just a fast code path
+            next_direction_code = "asc"
             icon = ""
 
-        if getvars["dir"] == "":
-            getvars.pop("dir", None)
-
-        if len(getvars.keys()) > 0:
-            url_append = f"&{getvars.urlencode()}"
-        else:
-            url_append = ""
+        url_sort_by = urlencode({"sort": self.field})
+        url_append = f"?{url_sort_by}"
+        if next_direction_code:
+            url_sort_direction = urlencode({"dir": next_direction_code})
+            url_append += f"&{url_sort_direction}"
 
         if icon:
             title = f"{display_title} {icon}"
         else:
             title = display_title
 
-        if "dir" in getvars:
-            url = f"{request.path}?sort={self.field}{url_append}"
-        else:
-            url = f"{request.path}{'?' + url_append if url_append else ''}"
-        return f'<a href="{url}" title="{display_title}">{title}</a>'
+        return (
+            f'<a href="{request.path}{url_append}" title="{display_title}">{title}</a>'
+        )
 
 
 def autosort(parser, token):
