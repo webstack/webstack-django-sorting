@@ -16,7 +16,7 @@ def get_sort_field(request):
     return f"{sort_sign}{field_name}"
 
 
-def render_sort_link(request, field_name, title):
+def render_sort_anchor(request, field_name, title):
     sort_by = request.GET.get("sort", "")
     if sort_by == field_name:
         # Render anchor link to next direction

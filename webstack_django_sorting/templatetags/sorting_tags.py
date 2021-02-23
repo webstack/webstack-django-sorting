@@ -4,8 +4,8 @@ from django import template
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
-from ..settings import INVALID_FIELD_RAISES_404, SORT_DIRECTIONS
-from ..utils import get_sort_field, render_sort_link
+from ..settings import INVALID_FIELD_RAISES_404
+from ..utils import get_sort_field, render_sort_anchor
 
 
 register = template.Library()
@@ -70,7 +70,7 @@ class SortAnchorNode(template.Node):
         else:
             display_title = self.title
 
-        return render_sort_link(context["request"], self.field, display_title)
+        return render_sort_anchor(context["request"], self.field, display_title)
 
 
 def autosort(parser, token):
