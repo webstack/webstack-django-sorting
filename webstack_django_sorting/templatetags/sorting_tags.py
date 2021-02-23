@@ -3,8 +3,7 @@ from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
 from ..settings import INVALID_FIELD_RAISES_404
-from ..utils import get_order_by_from_request, render_sort_anchor, sort_queryset
-
+from .. import common
 
 register = template.Library()
 
@@ -68,7 +67,7 @@ class SortAnchorNode(template.Node):
         else:
             display_title = self.title
 
-        return render_sort_anchor(context["request"], self.field, display_title)
+        return common.render_sort_anchor(context["request"], self.field, display_title)
 
 
 def autosort(parser, token):
@@ -105,10 +104,10 @@ class SortedDataNode(template.Node):
             key = self.queryset_var.var
 
         queryset = self.queryset_var.resolve(context)
-        order_by = get_order_by_from_request(context["request"])
+        order_by = common.get_order_by_from_request(context["request"])
 
         try:
-            context[key] = sort_queryset(queryset, order_by)
+            context[key] = common.sort_queryset(queryset, order_by)
         except ValueError as e:
             raise template.TemplateSyntaxError from e
         except AttributeError:
