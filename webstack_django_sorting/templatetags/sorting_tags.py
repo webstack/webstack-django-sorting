@@ -2,8 +2,8 @@ from django import template
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
-from ..settings import INVALID_FIELD_RAISES_404
-from .. import common
+from .settings import INVALID_FIELD_RAISES_404
+from . import common
 
 register = template.Library()
 

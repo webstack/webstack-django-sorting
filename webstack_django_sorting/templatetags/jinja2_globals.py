@@ -1,6 +1,5 @@
 from jinja2 import Markup
 
-from .settings import SORT_DIRECTIONS
 from . import common
 
 

@@ -1,3 +1,6 @@
+"""
+Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
+"""
 from urllib.parse import urlencode
 from operator import attrgetter
 
