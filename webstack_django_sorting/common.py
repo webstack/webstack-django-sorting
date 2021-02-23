@@ -43,7 +43,7 @@ def need_python_sorting(queryset, order_by):
         # Python can't sort order_by with '__'
         return False
 
-    # Python sorting if not a field
+    # Python sorting if not a DB field
     field = order_by[1:] if order_by[0] == "-" else order_by
     field_names = [f.name for f in queryset.model._meta.get_fields()]
     return field not in field_names
@@ -54,28 +54,25 @@ def sort_queryset(queryset, order_by):
     if not order_by:
         return queryset
 
-    if queryset.exists():
-        if need_python_sorting(queryset, order_by):
-            # Fallback on pure Python sorting (much slower on large data)
+    if need_python_sorting(queryset, order_by):
+        # Fallback on pure Python sorting (much slower on large data)
 
-            # The field name can be prefixed by the minus sign and we need to
-            # extract this information if we want to sort on simple object
-            # attributes (non-model fields)
-            if order_by[0] == "-":
-                if len(order_by) == 1:
-                    # Prefix without field name
-                    raise ValueError
+        # The field name can be prefixed by the minus sign and we need to
+        # extract this information if we want to sort on simple object
+        # attributes (non-model fields)
+        if order_by[0] == "-":
+            if len(order_by) == 1:
+                # Prefix without field name
+                raise ValueError
 
-                reverse = True
-                name = order_by[1:]
-            else:
-                reverse = False
-                name = order_by
-            if hasattr(queryset[0], name):
-                return sorted(queryset, key=attrgetter(name), reverse=reverse)
-            else:
-                raise AttributeError
+            reverse = True
+            name = order_by[1:]
         else:
-            return queryset.order_by(order_by)
-
-    return queryset
+            reverse = False
+            name = order_by
+        if hasattr(queryset[0], name):
+            return sorted(queryset, key=attrgetter(name), reverse=reverse)
+        else:
+            raise AttributeError
+    else:
+        return queryset.order_by(order_by)
