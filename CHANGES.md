@@ -4,12 +4,14 @@ Webstack-django-sorting Changelog
 v2.0.0
 ------
 
-Under development
+Released on February 23th, 2021
 
 - Python v3.6+ only
 - Remove support of Django <1.8
 - Major cleanup of code
 - Jinja2 support
+- Merge setup.py and setup.cfg in setup.cfg
+- Provide pyproject.toml
 
 v1.0.2
 ------
