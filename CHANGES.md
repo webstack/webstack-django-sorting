@@ -8,6 +8,8 @@ Under development
 
 - Python v3.6+ only
 - Remove support of Django <1.8
+- Major cleanup of code
+- Jinja2 support
 
 v1.0.2
 ------
