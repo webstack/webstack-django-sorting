@@ -1,12 +1,11 @@
 from operator import attrgetter
-from urllib.parse import urlencode
 
 from django import template
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 
 from ..settings import INVALID_FIELD_RAISES_404, SORT_DIRECTIONS
-from ..utils import get_sort_field
+from ..utils import get_sort_field, render_sort_link
 
 
 register = template.Library()
@@ -53,7 +52,7 @@ class SortAnchorNode(template.Node):
 
     Eg.
         {% anchor name Name %} generates
-        <a href="/the/current/path/?sort=name" title="Name">Name</a>
+        <a href="/the/current/path/?sort=name&dir=asc" title="Name">Name</a>
 
     """
 
@@ -70,34 +69,8 @@ class SortAnchorNode(template.Node):
             display_title = _(self.title[3:-2])
         else:
             display_title = self.title
-        request = context["request"]
 
-        sort_by = request.GET.get("sort", "")
-
-        if sort_by == self.field:
-            # Render anchor link to next direction
-            sort_direction = SORT_DIRECTIONS[request.GET.get("dir", "")]
-            next_direction_code = sort_direction["next"]
-            icon = sort_direction["icon"]
-        else:
-            # Just a fast code path
-            next_direction_code = "asc"
-            icon = ""
-
-        url_sort_by = urlencode({"sort": self.field})
-        url_append = f"?{url_sort_by}"
-        if next_direction_code:
-            url_sort_direction = urlencode({"dir": next_direction_code})
-            url_append += f"&{url_sort_direction}"
-
-        if icon:
-            title = f"{display_title} {icon}"
-        else:
-            title = display_title
-
-        return (
-            f'<a href="{request.path}{url_append}" title="{display_title}">{title}</a>'
-        )
+        return render_sort_link(context["request"], self.field, display_title)
 
 
 def autosort(parser, token):
