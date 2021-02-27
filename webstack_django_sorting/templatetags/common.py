@@ -1,30 +1,27 @@
 """
 Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 """
-from urllib.parse import urlencode
 from operator import attrgetter
 
 from .settings import SORT_DIRECTIONS
 
 
 def render_sort_anchor(request, field_name, title):
-    sort_by = request.GET.get("sort", "")
+    get_params = request.GET.copy()
+    sort_by = get_params.get("sort", None)
     if sort_by == field_name:
         # Render anchor link to next direction
-        sort_direction = SORT_DIRECTIONS[request.GET.get("dir", "")]
-        next_direction_code = sort_direction["next"]
-        icon = sort_direction["icon"]
+        current_direction = SORT_DIRECTIONS[get_params.get("dir", "")]
+        icon = current_direction["icon"]
+        next_direction_code = current_direction["next"]
     else:
-        # Just a fast code path
-        next_direction_code = "asc"
         icon = ""
+        next_direction_code = "asc"
 
-    url_sort_by = urlencode({"sort": field_name})
-    url_append = f"?{url_sort_by}"
-    if next_direction_code:
-        url_sort_direction = urlencode({"dir": next_direction_code})
-        url_append += f"&{url_sort_direction}"
-
+    # Not usual dict (can't update to replace)
+    get_params["sort"] = field_name
+    get_params["dir"] = next_direction_code
+    url_append = "?" + get_params.urlencode() if get_params else ""
     return f'<a href="{request.path}{url_append}" title="{title}">{title}{icon}</a>'
 
 
