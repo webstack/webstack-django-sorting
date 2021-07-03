@@ -11,7 +11,9 @@ def render_sort_anchor(request, field_name, title):
     sort_by = get_params.get("sort", None)
     if sort_by == field_name:
         # Render anchor link to next direction
-        current_direction = SORT_DIRECTIONS[get_params.get("dir", "")]
+        current_direction = SORT_DIRECTIONS.get(
+            get_params.get("dir", ""), SORT_DIRECTIONS[""]
+        )
         icon = current_direction["icon"]
         next_direction_code = current_direction["next"]
     else:
