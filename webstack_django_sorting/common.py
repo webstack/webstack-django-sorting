@@ -1,6 +1,8 @@
 """
 Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 """
+from django.db.models import F
+
 from operator import attrgetter
 
 from .settings import SORT_DIRECTIONS
@@ -51,30 +53,32 @@ def need_python_sorting(queryset, order_by):
     return field not in field_names
 
 
-def sort_queryset(queryset, order_by):
+def sort_queryset(queryset, order_by, null_ordering):
     """order_by is an Django ORM order_by argument"""
+
     if not order_by:
         return queryset
 
+    # The field name can be prefixed by the minus sign and we need to
+    # extract this information if we want to sort on simple object
+    # attributes
+    if order_by[0] == "-":
+        if len(order_by) == 1:
+            # Prefix without field name
+            raise ValueError
+
+        reverse = True
+        name = order_by[1:]
+    else:
+        reverse = False
+        name = order_by
+
     if need_python_sorting(queryset, order_by):
         # Fallback on pure Python sorting (much slower on large data)
-
-        # The field name can be prefixed by the minus sign and we need to
-        # extract this information if we want to sort on simple object
-        # attributes (non-model fields)
-        if order_by[0] == "-":
-            if len(order_by) == 1:
-                # Prefix without field name
-                raise ValueError
-
-            reverse = True
-            name = order_by[1:]
-        else:
-            reverse = False
-            name = order_by
         if hasattr(queryset[0], name):
             return sorted(queryset, key=attrgetter(name), reverse=reverse)
-        else:
-            raise AttributeError
-    else:
-        return queryset.order_by(order_by)
+        raise AttributeError
+    ordering_exp = (
+        F(name).desc if reverse else F(name).asc
+    )(**null_ordering)
+    return queryset.order_by(ordering_exp)
