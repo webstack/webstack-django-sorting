@@ -77,15 +77,28 @@ def autosort(parser, token):
     )
     context_var = None
 
-    # Check if has not required "as new_context_var" part
-    if len(bits) == 4 and bits[2] == "as":
-        context_var = bits[3]
-        del bits[2:]
-
-    if len(bits) != 2:
+    # Check if their is some optional parameter (as new_context_var, nulls_first, nulls_last)
+    if 2 > len(bits) > 7:
         raise template.TemplateSyntaxError(help_msg)
 
-    return SortedDataNode(bits[1], context_var=context_var)
+
+    context_var = None
+    null_ordering = {}
+
+    for index, bit in enumerate(bits):
+        if index > 1:
+            if bit == 'as' and index + 1 < len(bits):
+                context_var = bits[index + 1]
+                del bits[index:index + 1]
+            if bit.startswith('nulls_first'):
+                null_ordering['nulls_first'] = True if bit[len('nulls_first='):] == "True" else False
+            if bit.startswith('nulls_last'):
+                null_ordering['nulls_last'] = True if bit[len('nulls_last='):] == "True" else False
+
+    if len(null_ordering) > 1 and all(null_ordering.values()):
+        raise template.TemplateSyntaxError("Can't set nulls_first and nulls_last simultaneously.")
+
+    return SortedDataNode(bits[1], null_ordering, context_var=context_var)
 
 
 class SortedDataNode(template.Node):
@@ -93,9 +106,10 @@ class SortedDataNode(template.Node):
     Automatically sort a queryset with {% autosort queryset %}
     """
 
-    def __init__(self, queryset_var, context_var=None):
+    def __init__(self, queryset_var, null_ordering, context_var=None):
         self.queryset_var = template.Variable(queryset_var)
         self.context_var = context_var
+        self.null_ordering = null_ordering
 
     def render(self, context):
         if self.context_var is not None:
@@ -107,7 +121,7 @@ class SortedDataNode(template.Node):
         order_by = common.get_order_by_from_request(context["request"])
 
         try:
-            context[key] = common.sort_queryset(queryset, order_by)
+            context[key] = common.sort_queryset(queryset, order_by, self.null_ordering)
         except ValueError as e:
             raise template.TemplateSyntaxError from e
         except AttributeError:
