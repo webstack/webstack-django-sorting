@@ -31,7 +31,9 @@ To upgrade to `webstack-django-sorting` v1.0.0+, you must remove the old middlew
 
 The provide is available on PyPI:
 
-    pip install webstack_django_sorting
+```shell
+pip install webstack_django_sorting
+```
 
 The project provides examples of integration with Django and Jinja2 templates.
 
@@ -40,48 +42,52 @@ The project provides examples of integration with Django and Jinja2 templates.
 1. Add the application to the `INSTALLED_APPS` list:
 
     ```python
-       INSTALLED_APPS = [
-           # ...
-           'webstack_django_sorting',
-       ]
+    INSTALLED_APPS = [
+        # ...
+        'webstack_django_sorting',
+    ]
     ```
 
 2. Check the request context processor is loaded in `TEMPLATES` options:
 
     ```python
-       TEMPLATES = [
-           {
-               'BACKEND': 'django.template.backends.django.DjangoTemplates',
-               'DIRS': [],
-               'APP_DIRS': True,
-               'OPTIONS': {
-                   'context_processors': [
-                       # ...
-                       'django.template.context_processors.request',
-                       # ...
-                   ],
-               },
-           },
-       ]
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    # ...
+                    'django.template.context_processors.request',
+                    # ...
+                ],
+            },
+        },
+    ]
     ```
 
 3. Add this line at the top of your template to load the sorting tags:
 
-       {% load sorting_tags %}
+    ```html
+    {% load sorting_tags %}
+    ```
 
 4. Decide on a variable that you would like to sort, and use the
    autosort tag on that variable before iterating over it:
 
-       {% autosort object_list %}
+    ```html
+    {% autosort object_list %}
+    ```
 
 5. Now, you want to display different headers with links to sort
    your objects_list:
 
     ```html
-        <tr>
-           <th>{% anchor first_name _("Name") %}</th>
-           <th>{% anchor creation_date _("Creation") %}</th>
-        </tr>
+    <tr>
+        <th>{% anchor first_name _("Name") %}</th>
+        <th>{% anchor creation_date _("Creation") %}</th>
+    </tr>
     ```
 
    The first argument is a field or an attribute of the objects list, and the
@@ -89,10 +95,10 @@ The project provides examples of integration with Django and Jinja2 templates.
    snippet will be rendered like this in French:
 
     ```html
-        <tr>
-            <th><a href="/path/to/your/view/?sort=first_name" title="Nom">Nom</a></th>
-            <th><a href="/path/to/your/view/?sort=creation_date" title="Création">Création</a></th>
-        </tr>
+    <tr>
+        <th><a href="/path/to/your/view/?sort=first_name" title="Nom">Nom</a></th>
+        <th><a href="/path/to/your/view/?sort=creation_date" title="Création">Création</a></th>
+    </tr>
     ```
 
    If your application doesn't support internationalization, you can use a
@@ -103,16 +109,16 @@ The project provides examples of integration with Django and Jinja2 templates.
 1. Define the environment in the `TEMPLATES` options:
 
     ```python
-        TEMPLATES = {
-            {
-                "BACKEND": "django.template.backends.jinja2.Jinja2",
-                "DIRS": [],
-                "APP_DIRS": True,
-                "OPTIONS": {
-                    "environment": "testproj.testapp.jinja2.env.JinjaEnvironment",
-                },
+    TEMPLATES = {
+        {
+            "BACKEND": "django.template.backends.jinja2.Jinja2",
+            "DIRS": [],
+            "APP_DIRS": True,
+            "OPTIONS": {
+                "environment": "testproj.testapp.jinja2.env.JinjaEnvironment",
             },
-        ]
+        },
+    ]
     ````
 
 2. Your environment file should add `sorting_anchor` and `sort_queryset` to globals:
@@ -128,21 +134,21 @@ The project provides examples of integration with Django and Jinja2 templates.
             self.globals["sort_queryset"] = sort_queryset
     ```
 
-3. Now, you can generate header links to sort your queryset:
+3. Now, you can generate header links to sort your queryset.
 
     ```html
-        <tr>
-           <th>{{ sorting_anchor(request, "created_on", "Date") }}</th>
-           <!--...-->
-        <tr>
+    <tr>
+        <th>{{ sorting_anchor(request, "created_on", "Date") }}</th>
+        <!--...-->
+    <tr>
     ```
 
 4. The queryset should be wrapped with `sort_queryset` to use the GET request arguments for sorting:
 
     ```html
-        {% for secret_file in sort_queryset(request, secret_files) %}
-        <!--...-->
-        {% endfor %}
+    {% for secret_file in sort_queryset(request, secret_files) %}
+    <!--...-->
+    {% endfor %}
     ```
 
 
