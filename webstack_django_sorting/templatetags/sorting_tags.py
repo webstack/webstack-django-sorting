@@ -1,6 +1,6 @@
 from django import template
 from django.http import Http404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .settings import INVALID_FIELD_RAISES_404
 from . import common
