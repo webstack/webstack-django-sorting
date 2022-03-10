@@ -1,0 +1,25 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.42857143;
+  color: #333;
+}
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+  text-align: left;
+}
+thead > tr > th > a {
+  text-decoration: none;
+}
+thead > tr > th > a:visited {
+  color: inherit;
+}
+tr > th,
+tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+}
