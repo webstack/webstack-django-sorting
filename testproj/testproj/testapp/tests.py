@@ -1,8 +1,8 @@
 import django.template as django_template
 from django.template.engine import Engine
 from django.template.response import SimpleTemplateResponse
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 from . import models
 
@@ -49,7 +49,7 @@ class NullsTestCase(TestCase):
         models.SecretFile.objects.create(filename="bar.txt", order=2, size=512)
 
     def test_sorting_nulls_first(self):
-        """ Verify None sorted field_name is in firsts places when sorting in asc and desc order """
+        """Verify None sorted field_name is in first places when sorting in asc and desc order"""
 
         models.SecretFile.objects.create(filename=None, order=3, size=512)
         # asc order
@@ -69,7 +69,7 @@ class NullsTestCase(TestCase):
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
 
     def test_sorting_nulls_last(self):
-        """ Verify None sorted field_name is in lasts places when sorting in asc and desc order """
+        """Verify None sorted field_name is in last places when sorting in asc and desc order."""
 
         models.SecretFile.objects.create(filename=None, order=3, size=512)
         # asc order
@@ -89,7 +89,7 @@ class NullsTestCase(TestCase):
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
 
     def test_sorting_nulls_first_and_last(self):
-        """ Verify nulls_first and nulls_last autosort params can't be used at the same time """
+        """Verify nulls_first and nulls_last autosort params can't be used at the same time"""
 
         engine = Engine(
             libraries={'sorting_tags': 'webstack_django_sorting.templatetags.sorting_tags'},
@@ -100,7 +100,7 @@ class NullsTestCase(TestCase):
             {% load sorting_tags %}
             {% autosort secret_files nulls_first=True nulls_last=True %}
             """)
-            response = SimpleTemplateResponse(
+            SimpleTemplateResponse(
                 template,
                 context={'secret_files': models.SecretFile.objects.all()}
             )
