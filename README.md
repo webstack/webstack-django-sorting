@@ -80,7 +80,7 @@ The project provides examples of integration with Django and Jinja2 templates.
     {% autosort object_list %}
     ```
 
-    You can pass the option `nulls_first=True` (or `nulls_first=False`) to
+    You can pass the option `nulls=first` (or `nulls=last`) to
     explicitly define the ordering of NULL (not supported by all databases,
     [Indexing ASC, DESC and NULLS
     FIRST/LAST](https://use-the-index-luke.com/sql/sorting-grouping/order-by-asc-desc-nulls-last))
