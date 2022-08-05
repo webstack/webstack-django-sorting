@@ -57,6 +57,8 @@ def sort_queryset(queryset, order_by, null_ordering):
     """order_by is an Django ORM order_by argument"""
 
     if not order_by:
+        # In this case the queryset can't be ordered (no field name specified)
+        # even though nulls ordering is set
         return queryset
 
     # The field name can be prefixed by the minus sign and we need to
@@ -82,3 +84,11 @@ def sort_queryset(queryset, order_by, null_ordering):
         F(name).desc if reverse else F(name).asc
     )(**null_ordering)
     return queryset.order_by(ordering_exp)
+
+
+def get_null_ordering(request, default_template_ordering):
+    # prioritize changes in url parameter over the default template variable
+    null_ordering = request.GET.get('nulls', default_template_ordering or {})
+    if null_ordering:
+        null_ordering = {f'nulls_{null_ordering}': True}
+    return null_ordering

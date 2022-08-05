@@ -77,26 +77,21 @@ def autosort(parser, token):
     )
     context_var = None
 
-    # Check if their is some optional parameter (as new_context_var, nulls_first, nulls_last)
+    # Check if their is some optional parameter (as new_context_var, nulls)
     if 2 > len(bits) > 7:
         raise template.TemplateSyntaxError(help_msg)
 
 
     context_var = None
-    null_ordering = {}
+    null_ordering = None
 
     for index, bit in enumerate(bits):
         if index > 1:
             if bit == 'as' and index + 1 < len(bits):
                 context_var = bits[index + 1]
                 del bits[index:index + 1]
-            if bit.startswith('nulls_first'):
-                null_ordering['nulls_first'] = True if bit[len('nulls_first='):] == "True" else False
-            if bit.startswith('nulls_last'):
-                null_ordering['nulls_last'] = True if bit[len('nulls_last='):] == "True" else False
-
-    if len(null_ordering) > 1 and all(null_ordering.values()):
-        raise template.TemplateSyntaxError("Can't set nulls_first and nulls_last simultaneously.")
+            if bit.startswith('nulls'):
+                null_ordering = bit[len('nulls='):]
 
     return SortedDataNode(bits[1], null_ordering, context_var=context_var)
 
@@ -119,6 +114,7 @@ class SortedDataNode(template.Node):
 
         queryset = self.queryset_var.resolve(context)
         order_by = common.get_order_by_from_request(context["request"])
+        self.null_ordering = common.get_null_ordering(context["request"], self.null_ordering)
 
         try:
             context[key] = common.sort_queryset(queryset, order_by, self.null_ordering)
