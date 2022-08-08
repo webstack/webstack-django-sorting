@@ -80,13 +80,15 @@ def sort_queryset(queryset, order_by, null_ordering):
         if hasattr(queryset[0], name):
             return sorted(queryset, key=attrgetter(name), reverse=reverse)
         raise AttributeError
+
     ordering_exp = (F(name).desc if reverse else F(name).asc)(**null_ordering)
     return queryset.order_by(ordering_exp)
 
 
-def get_null_ordering(request, default_template_ordering):
+def get_null_ordering(request, default_template_ordering=None):
     # Prioritize changes in URL parameter over the default template variable
-    null_ordering = request.GET.get("nulls", default_template_ordering or {})
-    if null_ordering:
-        null_ordering = {f"nulls_{null_ordering}": True}
-    return null_ordering
+    nulls_value = request.GET.get("nulls", default_template_ordering)
+    if nulls_value:
+        return {f"nulls_{nulls_value}": True}
+
+    return {}
