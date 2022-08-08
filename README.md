@@ -157,6 +157,14 @@ The project provides examples of integration with Django and Jinja2 templates.
 
 That's it!
 
+## Settings
+
+The library provides a few settings that you can define in the Django settings of your project:
+
+- `DEFAULT_SORT_UP`, the HTML character to display the up symbol in the column headers (' &uarr;' by default).
+- `DEFAULT_SORT_DOWN`, the HTML character to display the down symbol in the column headers (' &darr;' by default).
+- `SORTING_INVALID_FIELD_RAISES_404`, if true, a 404 response will be returned on invalid use of query parameters (false by default).
+
 ## Example
 
 A test project is provided with the source code, the file `testproj/README.md`
