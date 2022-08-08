@@ -155,5 +155,9 @@ The project provides examples of integration with Django and Jinja2 templates.
     {% endfor %}
     ```
 
-
 That's it!
+
+## Example
+
+A test project is provided with the source code, the file `testproj/README.md`
+provides information on how to use it.
