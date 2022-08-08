@@ -1,8 +1,8 @@
 import django.template as django_template
 from django.template.engine import Engine
 from django.template.response import SimpleTemplateResponse
-from django.test import TestCase
 from django.urls import reverse
+from webstack_django_sorting import settings
 
 from . import models
 
@@ -99,3 +99,16 @@ class NullsTestCase(TestCase):
             self.nulls_last_url, {"sort": "filename", "nulls": "last", "dir": "desc"}
         )
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
+
+    def test_check_values(self):
+        # Internal INVALID_FIELD_RAISES_404 is set at loading (no override_settings)
+        saved = settings.INVALID_FIELD_RAISES_404
+        try:
+            settings.INVALID_FIELD_RAISES_404 = True
+            response = self.client.get(
+                self.nulls_last_url, {"sort": "filename", "nulls": "foo", "dir": "asc"}
+            )
+        finally:
+            settings.INVALID_FIELD_RAISES_404 = saved
+
+        self.assertEqual(response.status_code, 404)

@@ -4,8 +4,9 @@ Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 from operator import attrgetter
 
 from django.db.models import F
+from django.http import Http404
 
-from .settings import SORT_DIRECTIONS
+from . import settings
 
 
 def render_sort_anchor(request, field_name, title):
@@ -13,8 +14,8 @@ def render_sort_anchor(request, field_name, title):
     sort_by = get_params.get("sort", None)
     if sort_by == field_name:
         # Render anchor link to next direction
-        current_direction = SORT_DIRECTIONS.get(
-            get_params.get("dir", ""), SORT_DIRECTIONS[""]
+        current_direction = settings.SORT_DIRECTIONS.get(
+            get_params.get("dir", ""), settings.SORT_DIRECTIONS[""]
         )
         icon = current_direction["icon"]
         next_direction_code = current_direction["next"]
@@ -89,6 +90,13 @@ def get_null_ordering(request, default_template_ordering=None):
     # Prioritize changes in URL parameter over the default template variable
     nulls_value = request.GET.get("nulls", default_template_ordering)
     if nulls_value:
+        if nulls_value not in ("first", "last"):
+            if settings.INVALID_FIELD_RAISES_404:
+                raise Http404("The nulls query paramater should be 'first' or 'last'.")
+
+            # Else ignores invalid values
+            return {}
+
         return {f"nulls_{nulls_value}": True}
 
     return {}

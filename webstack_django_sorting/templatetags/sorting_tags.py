@@ -2,8 +2,7 @@ from django import template
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from .. import common
-from ..settings import INVALID_FIELD_RAISES_404
+from .. import common, settings
 
 register = template.Library()
 
@@ -81,17 +80,16 @@ def autosort(parser, token):
     if 2 > len(bits) > 7:
         raise template.TemplateSyntaxError(help_msg)
 
-
     context_var = None
     null_ordering = None
 
     for index, bit in enumerate(bits):
         if index > 1:
-            if bit == 'as' and index + 1 < len(bits):
+            if bit == "as" and index + 1 < len(bits):
                 context_var = bits[index + 1]
-                del bits[index:index + 1]
-            if bit.startswith('nulls'):
-                null_ordering = bit[len('nulls='):]
+                del bits[index : index + 1]
+            if bit.startswith("nulls"):
+                null_ordering = bit[len("nulls=") :]
 
     return SortedDataNode(bits[1], null_ordering, context_var=context_var)
 
@@ -114,14 +112,16 @@ class SortedDataNode(template.Node):
 
         queryset = self.queryset_var.resolve(context)
         order_by = common.get_order_by_from_request(context["request"])
-        self.null_ordering = common.get_null_ordering(context["request"], self.null_ordering)
+        self.null_ordering = common.get_null_ordering(
+            context["request"], self.null_ordering
+        )
 
         try:
             context[key] = common.sort_queryset(queryset, order_by, self.null_ordering)
         except ValueError as e:
             raise template.TemplateSyntaxError from e
         except AttributeError:
-            if INVALID_FIELD_RAISES_404:
+            if settings.INVALID_FIELD_RAISES_404:
                 raise Http404(
                     "Invalid field sorting. If INVALID_FIELD_RAISES_404 were set to "
                     "False, the error would have been ignored."
