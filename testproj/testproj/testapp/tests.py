@@ -1,6 +1,4 @@
-import django.template as django_template
-from django.template.engine import Engine
-from django.template.response import SimpleTemplateResponse
+from django.test import TestCase
 from django.urls import reverse
 from webstack_django_sorting import settings
 
