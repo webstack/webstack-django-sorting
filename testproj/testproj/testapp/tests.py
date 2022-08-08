@@ -8,7 +8,6 @@ from . import models
 
 
 class IndexTest(TestCase):
-
     def setUp(self):
         self.url = reverse("secret_list")
 
@@ -53,18 +52,25 @@ class NullsTestCase(TestCase):
 
         models.SecretFile.objects.create(filename=None, order=3, size=512)
         # asc order
-        values = ["<SecretFile: #3 None>", "<SecretFile: #2 bar.txt>", "<SecretFile: #1 foo.txt>"]
+        values = [
+            "<SecretFile: #3 None>",
+            "<SecretFile: #2 bar.txt>",
+            "<SecretFile: #1 foo.txt>",
+        ]
         response = self.client.get(
-            self.nulls_first_url,
-            {"sort": "filename", "nulls_first": True, "dir": "asc"}
+            self.nulls_first_url, {"sort": "filename", "nulls": "first", "dir": "asc"}
         )
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
 
         # desc order
-        values = ["<SecretFile: #3 None>", "<SecretFile: #1 foo.txt>", "<SecretFile: #2 bar.txt>"]
+        values = [
+            "<SecretFile: #3 None>",
+            "<SecretFile: #1 foo.txt>",
+            "<SecretFile: #2 bar.txt>",
+        ]
         response = self.client.get(
             self.nulls_first_url,
-            {"sort": "filename", "nulls_first": True, "dir": "desc"}
+            {"sort": "filename", "nulls": "first", "dir": "desc"},
         )
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
 
@@ -73,35 +79,23 @@ class NullsTestCase(TestCase):
 
         models.SecretFile.objects.create(filename=None, order=3, size=512)
         # asc order
-        values = ["<SecretFile: #2 bar.txt>", "<SecretFile: #1 foo.txt>", "<SecretFile: #3 None>"]
+        values = [
+            "<SecretFile: #2 bar.txt>",
+            "<SecretFile: #1 foo.txt>",
+            "<SecretFile: #3 None>",
+        ]
         response = self.client.get(
-            self.nulls_last_url,
-            {"sort": "filename", "nulls_last": True, "dir": "asc"}
+            self.nulls_last_url, {"sort": "filename", "nulls": "last", "dir": "asc"}
         )
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
 
         # desc order
-        values = ["<SecretFile: #1 foo.txt>", "<SecretFile: #2 bar.txt>", "<SecretFile: #3 None>"]
+        values = [
+            "<SecretFile: #1 foo.txt>",
+            "<SecretFile: #2 bar.txt>",
+            "<SecretFile: #3 None>",
+        ]
         response = self.client.get(
-            self.nulls_last_url,
-            {"sort": "filename", "nulls_last": True, "dir": "desc"}
+            self.nulls_last_url, {"sort": "filename", "nulls": "last", "dir": "desc"}
         )
         self.assertQuerysetEqual(list(response.context["secret_files"]), values)
-
-    def test_sorting_nulls_first_and_last(self):
-        """Verify nulls_first and nulls_last autosort params can't be used at the same time"""
-
-        engine = Engine(
-            libraries={'sorting_tags': 'webstack_django_sorting.templatetags.sorting_tags'},
-            context_processors=['django.template.context_processors.request'],
-        )
-        with self.assertRaises(django_template.TemplateSyntaxError) as exc:
-            template = engine.from_string("""
-            {% load sorting_tags %}
-            {% autosort secret_files nulls_first=True nulls_last=True %}
-            """)
-            SimpleTemplateResponse(
-                template,
-                context={'secret_files': models.SecretFile.objects.all()}
-            )
-        self.assertIn("Can't set nulls_first and nulls_last simultaneously.", exc.exception.args)
