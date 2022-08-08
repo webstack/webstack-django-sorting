@@ -12,7 +12,8 @@ There are other powerful projects to sort tables such as
 high level `render_table` tag because it requires to define the CSS in
 `Table` classes or to write custom templates.
 
-A demonstration of the features is provided in `testproj` directory.
+A demonstration of the features is provided in `testproj` directory. The file
+`testproj/README.md` provides information on how to use it.
 
 ## Features
 
@@ -164,8 +165,3 @@ The library provides a few settings that you can define in the Django settings o
 - `DEFAULT_SORT_UP`, the HTML character to display the up symbol in the column headers (' &uarr;' by default).
 - `DEFAULT_SORT_DOWN`, the HTML character to display the down symbol in the column headers (' &darr;' by default).
 - `SORTING_INVALID_FIELD_RAISES_404`, if true, a 404 response will be returned on invalid use of query parameters (false by default).
-
-## Example
-
-A test project is provided with the source code, the file `testproj/README.md`
-provides information on how to use it.
