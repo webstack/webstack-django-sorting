@@ -1,9 +1,9 @@
 """
 Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 """
-from django.db.models import F
-
 from operator import attrgetter
+
+from django.db.models import F
 
 from .settings import SORT_DIRECTIONS
 
@@ -80,15 +80,13 @@ def sort_queryset(queryset, order_by, null_ordering):
         if hasattr(queryset[0], name):
             return sorted(queryset, key=attrgetter(name), reverse=reverse)
         raise AttributeError
-    ordering_exp = (
-        F(name).desc if reverse else F(name).asc
-    )(**null_ordering)
+    ordering_exp = (F(name).desc if reverse else F(name).asc)(**null_ordering)
     return queryset.order_by(ordering_exp)
 
 
 def get_null_ordering(request, default_template_ordering):
-    # prioritize changes in url parameter over the default template variable
-    null_ordering = request.GET.get('nulls', default_template_ordering or {})
+    # Prioritize changes in URL parameter over the default template variable
+    null_ordering = request.GET.get("nulls", default_template_ordering or {})
     if null_ordering:
-        null_ordering = {f'nulls_{null_ordering}': True}
+        null_ordering = {f"nulls_{null_ordering}": True}
     return null_ordering
