@@ -3,6 +3,10 @@ from django.shortcuts import render
 from . import models
 
 
+def home(request):
+    return render(request, "home.html")
+
+
 def secret_list(request):
     return render(
         request, "secret_list.html", {"secret_files": models.SecretFile.objects.all()}

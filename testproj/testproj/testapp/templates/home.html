@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Test nulls first</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    </head>
+    <body>
+        <h2>Test views with Django template</h2>
+        <ul>
+            <li>
+                <a href="{% url 'secret_list' %}">List of secrets</a>
+            </li>
+            <li>
+                <a href="{% url 'nulls_first' %}">Nulls first</a>
+            </li>
+            <li>
+                <a href="{% url 'nulls_last' %}">Nulls last</a>
+            </li>
+        </ul>
+        <h2>Test views with Jinja template</h2>
+        <ul>
+            <li>
+                <a href="{% url 'jinja_secret_list' %}">List of secrets</a>
+            </li>
+            <li>
+                <a href="{% url 'jinja_nulls_first' %}">Nulls first</a>
+            </li>
+            <li>
+                <a href="{% url 'jinja_nulls_last' %}">Nulls last</a>
+            </li>
+        </ul>
+    </body>
+</html>
