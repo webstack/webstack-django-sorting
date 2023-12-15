@@ -24,16 +24,16 @@ class IndexTest(TestCase):
     def test_sorting_direction(self):
         response = self.client.get(self.url, {"sort": "order", "dir": "asc"})
         values = [self.foo_file, self.bar_file]
-        self.assertQuerysetEqual(response.context["secret_files"], values)
+        self.assertQuerySetEqual(response.context["secret_files"], values)
 
         response = self.client.get(self.url, {"sort": "order", "dir": "desc"})
         values = [self.bar_file, self.foo_file]
-        self.assertQuerysetEqual(response.context["secret_files"], values)
+        self.assertQuerySetEqual(response.context["secret_files"], values)
 
         # Nothing wrong happens with an invalid direction and ASC is used
         response = self.client.get(self.url, {"sort": "order", "dir": "NOT"})
         values = [self.foo_file, self.bar_file]
-        self.assertQuerysetEqual(response.context["secret_files"], values)
+        self.assertQuerySetEqual(response.context["secret_files"], values)
 
     def test_sorting_argument(self):
         # Nothing wrong happens with invalid sort argument
@@ -64,7 +64,7 @@ class NullsTestCase(TestCase):
         response = self.client.get(
             self.nulls_first_url, {"sort": "filename", "nulls": "first", "dir": "asc"}
         )
-        self.assertQuerysetEqual(list(response.context["secret_files"]), values)
+        self.assertQuerySetEqual(list(response.context["secret_files"]), values)
 
         # desc order
         values = [self.none_file, self.foo_file, self.bar_file]
@@ -72,7 +72,7 @@ class NullsTestCase(TestCase):
             self.nulls_first_url,
             {"sort": "filename", "nulls": "first", "dir": "desc"},
         )
-        self.assertQuerysetEqual(list(response.context["secret_files"]), values)
+        self.assertQuerySetEqual(list(response.context["secret_files"]), values)
 
     def test_sorting_nulls_last(self):
         """Verify None sorted field_name is in last places when sorting in asc and desc order."""
@@ -82,14 +82,14 @@ class NullsTestCase(TestCase):
         response = self.client.get(
             self.nulls_last_url, {"sort": "filename", "nulls": "last", "dir": "asc"}
         )
-        self.assertQuerysetEqual(list(response.context["secret_files"]), values)
+        self.assertQuerySetEqual(list(response.context["secret_files"]), values)
 
         # desc order
         values = [self.foo_file, self.bar_file, self.none_file]
         response = self.client.get(
             self.nulls_last_url, {"sort": "filename", "nulls": "last", "dir": "desc"}
         )
-        self.assertQuerysetEqual(list(response.context["secret_files"]), values)
+        self.assertQuerySetEqual(list(response.context["secret_files"]), values)
 
     def test_check_values(self):
         # Internal INVALID_FIELD_RAISES_404 is set at loading (no override_settings)
