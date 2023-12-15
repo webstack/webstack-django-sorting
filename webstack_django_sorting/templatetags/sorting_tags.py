@@ -112,9 +112,7 @@ class SortedDataNode(template.Node):
 
         queryset = self.queryset_var.resolve(context)
         order_by = common.get_order_by_from_request(context["request"])
-        null_ordering = common.get_null_ordering(
-            context["request"], self.null_ordering
-        )
+        null_ordering = common.get_null_ordering(context["request"], self.null_ordering)
 
         try:
             context[key] = common.sort_queryset(queryset, order_by, null_ordering)
