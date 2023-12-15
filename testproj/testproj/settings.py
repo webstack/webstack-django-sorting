@@ -101,7 +101,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
 
 # Django v5 set USE_TZ to True by default
 USE_TZ = True
