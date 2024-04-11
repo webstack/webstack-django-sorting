@@ -1,6 +1,13 @@
 Webstack-django-sorting Changelog
 =================================
 
+v2.3.2
+------
+
+Released on TBC
+
+- Set default sort order on first click of a column
+
 v2.0.0
 ------
 

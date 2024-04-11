@@ -9,19 +9,30 @@ from django.http import Http404
 from . import settings
 
 
-def render_sort_anchor(request, field_name, title):
+def render_sort_anchor(request, field_name, title, default_direction):
     get_params = request.GET.copy()
-    sort_by = get_params.get("sort", None)
+    sort_by = get_params.get("sort", None) 
     if sort_by == field_name:
-        # Render anchor link to next direction
-        current_direction = settings.SORT_DIRECTIONS.get(
-            get_params.get("dir", ""), settings.SORT_DIRECTIONS[""]
-        )
-        icon = current_direction["icon"]
-        next_direction_code = current_direction["next"]
+
+        dir = get_params.get("dir")
+        
+        if dir == "asc":
+            icon = settings.DEFAULT_SORT_UP
+        elif dir == "desc":
+            icon = settings.DEFAULT_SORT_DOWN
+        else:
+            icon = ""
+
+        # Mapping of direction transitions based on the default sort direction
+        transition_map = {
+            "asc": {"asc": "desc", "desc": "", "": "asc"},
+            "desc": {"desc": "asc", "asc": "", "": "desc"}
+        }
+        next_direction_code = transition_map[default_direction].get(dir, "")
+
     else:
         icon = ""
-        next_direction_code = "asc"
+        next_direction_code = default_direction
 
     # Not usual dict (can't update to replace)
     get_params["sort"] = field_name

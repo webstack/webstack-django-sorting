@@ -106,8 +106,11 @@ The project provides examples of integration with Django and Jinja2 templates.
     </tr>
     ```
 
+   An optional 3rd argument allows you to sort first by descending
+   (e.g. show most recent dates first) `{% anchor some_date _("Date") desc %}`
+
    If your application doesn't support internationalization, you can use a
-   simple `{% anchor first_name Name %}`.
+   simple `{% anchor first_name Name %}`.   
 
 ## For Jinja2 templates
 
