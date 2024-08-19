@@ -11,6 +11,7 @@ def anchor(parser, token):
     """
     Parses a tag that's supposed to be in this format '{% anchor field title %}'
     Title may be a "string", _("trans string"), or variable
+    Optional - default sort direction to desc '{% anchor field title "desc" %}'
     """
     bits = [b for b in token.split_contents()]
     if len(bits) < 2:
@@ -34,8 +35,17 @@ def anchor(parser, token):
     except IndexError:
         title = bits[1].capitalize()
 
+    __import__("ipdb").set_trace()
+    default_sort_order = (
+        "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
+    )
+
     return SortAnchorNode(
-        bits[1].strip(), title.strip(), title_is_var, title_is_translatable
+        bits[1].strip(),
+        title.strip(),
+        title_is_var,
+        title_is_translatable,
+        default_sort_order,
     )
 
 
@@ -52,11 +62,14 @@ class SortAnchorNode(template.Node):
 
     """
 
-    def __init__(self, field, title, title_is_var, title_is_translatable):
+    def __init__(
+        self, field, title, title_is_var, title_is_translatable, default_sort_order
+    ):
         self.field = field
         self.title = title
         self.title_is_var = title_is_var
         self.title_is_translatable = title_is_translatable
+        self.default_sort_order = default_sort_order
 
     def render(self, context):
         if self.title_is_var:
@@ -66,7 +79,9 @@ class SortAnchorNode(template.Node):
         else:
             display_title = self.title
 
-        return common.render_sort_anchor(context["request"], self.field, display_title)
+        return common.render_sort_anchor(
+            context["request"], self.field, display_title, self.default_sort_order
+        )
 
 
 def autosort(parser, token):

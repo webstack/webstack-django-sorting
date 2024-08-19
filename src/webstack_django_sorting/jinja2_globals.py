@@ -3,8 +3,8 @@ from markupsafe import Markup
 from . import common
 
 
-def sorting_anchor(request, field_name, title):
-    return Markup(common.render_sort_anchor(request, field_name, title))
+def sorting_anchor(request, field_name, title, default_sort_order="asc"):
+    return Markup(common.render_sort_anchor(request, field_name, title, default_sort_order))
 
 
 def sort_queryset(request, queryset, **context_var):
