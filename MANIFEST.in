@@ -1,5 +1,0 @@
-include CHANGES.md CONTRIBUTORS.txt LICENSE.txt README.md
-
-graft webstack_django_sorting
-
-global-exclude *.py[cod] __pycache__ *.so

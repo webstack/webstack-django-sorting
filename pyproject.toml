@@ -1,7 +1,48 @@
-[build-system]
-requires = ["setuptools>=42", "wheel"]
-build-backend = "setuptools.build_meta"
+[project]
+name = "webstack-django-sorting"
+version = "2.3.1"
+description = "Easy sorting of tables with Django"
+authors = [
+    { name = "Karim A. (aka Directeur)", email = "directeur@gmail.com" },
+    { name = "Eric Florenzano", email = "floguy@gmail.com" },
+    { name = "Stéphane Raimbault", email = "stephane.raimbault@webstack.fr" },
+    { name = "S. Kossouho", email = "artscoop93@gmail.com" },
+    { name = "Joffrey M.", email = "joffrey.mander@polyconseil.fr" },
+]
+maintainers = [
+    { name = "Stéphane Raimbault", email = "stephane.raimbault@webstack.fr" },
+]
+dependencies = ["Django>=3.0, <6.0"]
+readme = "README.md"
+requires-python = ">=3.6"
+license = "BSD-3-Clause"
+keywords = ["django", "sorting", "table"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+]
 
-[tool.black]
-target-version = ["py311"]
-line_length = 88
+[project.urls]
+repository = "https://github.com/webstack/webstack-django-sorting.git"
+changelog = "https://github.com/webstack/webstack-django-sorting/blob/master/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/webstack/webstack-django-sorting/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/webstack_django_sorting"]
