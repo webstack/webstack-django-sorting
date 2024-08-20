@@ -15,18 +15,19 @@ v2.4.0
 
 - Migrate library to rye
 
+v2.3.1
+------
+
+- Fix release v2.3.0 on the supported Django version (v5).
+
 v2.3.0
 ------
 
-- Change target version of Black to Python 3.11
-- Fix deprecated `USE_L10N`
-- Fix deprecated `assertQuerysetEqual`
-- Remove URL list provided by new home page
-- Add new home view to list of views
-- Fix HTML and add comment in <p>
-- Upgrade testproj to Django v5
-- Fix self.null_ordering reassignment to avoid modification in template. Thanks
-  to @sandre35.
+- Support Django 5.0
+- Fix nulls=last persistency in template (#26). Thanks @sandre35.
+- Migrate `testproj` to Django v5.0 (fix deprecated)
+- Add home view to `testproj` to list all views
+- Fix HTML of test views
 
 v2.2.1
 ------
@@ -36,62 +37,62 @@ v2.2.1
 v2.2.0
 ------
 
-- Update the list of URLs in README of testproj.
-- Support Django v4.1
-- Rewrite bad comparison of instances against strings
-- Add note about settings in README
-- Provide 'nulls' examples for Jinja
-- Remove useless imports
-- Handle invalid values of nulls with 404 setting
-- Update tests after API changes (nulls=first|last)
-- Adjust URL name of test project
-- Add information about test project in main README.md
-- Fix format and import ordering
-- New way to pass nulls ordering. Thanks to @manderj.
+No build.
+
+- Breaking change, `nulls_first=True` and `nulls_last=True` are replaced by `nulls=first | last`.
+  Thanks to @manderj.
+- Support of Django 4.1
+- Handle setting to raise 404 on invalid values for new 'nulls' option
+- Add more examples for Jinja
+- Various cleanup
 
 v2.1.1
 ------
 
-- Fix deprecated import of Markup from jinja2
-- Add doc about nulls_first in README and fix typo
+- Fix deprecated import of Markup from Jinja2
 
 v2.1.0
 ------
 
-- Fix incorrect setup of static files
-- tests: serve common templates css through static files. Thanks to @manderj.
-- Add sorting by nulls first or last. Thanks to @manderj.
+- Add sorting by nulls first or last by @manderj.
 
 v2.0.3
 ------
 
-- Add rule for Black in pyproject.toml
-- Fix Jinja2 is required (#19)
 - Added Django 4.0 support. Thanks to David Smith.
+- Fix Jinja2 is required (#19)
 
 v2.0.2
 ------
 
 - Fix missing other GET params in anchors
-- pip instal -e doesn't work w/o setup.py
-- Fix path to jinj2 tags in testproj
+- Fix path to jinja2 tags in testproj
+- Fix trailing commas in classifiers
 
 v2.0.1
 ------
 
-- Fix trailing commas in classifiers
+- Fix trailing commas in classifiers (`setup.cfg`).
 
 v2.0.0
 ------
 
 Released on February 23th, 2021
 
-- Python v3.6+ only
-- Remove support of Django <1.8
-- Major cleanup of code
-- Jinja2 support
-- Merge setup.py and setup.cfg in setup.cfg
-- Provide pyproject.toml
+- **Add Jinja2 suppor**t \o/
+- Modern Python packaging
+- Add note about django-tables2 in README
+- Add documentation for Jinja2
+- Include the space before the icon in settings
+- Simpler code to render anchor
+- Rename 'inverse' key to 'next' in SORT_DIRECTIONS
+- Move settings to one upper level
+- Use f-strings
+- Fix error handling in queryset sorting
+- Move sort_directions dict into dedicated file
+- Regenerate test project with Django 3.1
+- Remove support of Python 2 and upgrade to Django >=3.0
+- Various cleanups
 
 v1.0.2
 ------
