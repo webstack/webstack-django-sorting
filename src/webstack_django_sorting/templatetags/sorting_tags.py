@@ -35,7 +35,6 @@ def anchor(parser, token):
     except IndexError:
         title = bits[1].capitalize()
 
-    __import__("ipdb").set_trace()
     default_sort_order = (
         "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
     )
