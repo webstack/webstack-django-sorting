@@ -1,5 +1,15 @@
-Webstack-django-sorting Changelog
+webstack-django-sorting Changelog
 =================================
+
+v3.0.2
+------
+
+- Removed ipdb import. Thanks zerolab.
+
+v3.0.1
+------
+
+- Adjustments to CI
 
 v3.0.0
 ------
