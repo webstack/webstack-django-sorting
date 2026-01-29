@@ -1,6 +1,12 @@
 webstack-django-sorting Changelog
 =================================
 
+v3.0.3
+------
+
+- Migraged from rye to uv
+- Supports Django 6
+
 v3.0.2
 ------
 
