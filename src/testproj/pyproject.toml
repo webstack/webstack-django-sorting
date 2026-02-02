@@ -5,7 +5,7 @@ description = "Test project of webstack-django-sorting"
 authors = [
     { name = "Stéphane Raimbault", email = "stephane.raimbault@webstack.fr" },
 ]
-dependencies = ["django>=5.1", "jinja2>=3.1.4", "webstack-django-sorting"]
+dependencies = ["django>=6.0", "jinja2>=3.1.6", "webstack-django-sorting"]
 readme = "README.md"
 requires-python = ">= 3.12"
 

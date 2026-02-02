@@ -121,8 +121,8 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "django", specifier = ">=5.1" },
-    { name = "jinja2", specifier = ">=3.1.4" },
+    { name = "django", specifier = ">=6.0" },
+    { name = "jinja2", specifier = ">=3.1.6" },
     { name = "webstack-django-sorting", editable = "../../" },
 ]
 
