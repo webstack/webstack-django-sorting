@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, cast
 
 from django import template
 from django.http import Http404
@@ -67,7 +67,7 @@ class SortedDataNode(template.Node):
         self.null_ordering = null_ordering
 
     def render(self, context: Context) -> str:
-        key = self.context_var if self.context_var is not None else self.queryset_var.var
+        key: str = self.context_var if self.context_var is not None else str(self.queryset_var.var)
 
         queryset = self.queryset_var.resolve(context)
         order_by = common.get_order_by_from_request(context["request"])
