@@ -200,8 +200,12 @@ SORTING_CSS_CLASS_DESC = "sorted-desc"
 This will produce `<a class="sorted-asc" ...>` when sorted ascending, allowing you to style the indicator with CSS:
 
 ```css
-.sorted-asc::after { content: " \2191"; }  /* Up arrow */
-.sorted-desc::after { content: " \2193"; }  /* Down arrow */
+.sorted-asc::after {
+  content: " \2191";
+} /* Up arrow */
+.sorted-desc::after {
+  content: " \2193";
+} /* Down arrow */
 ```
 
 ### Error handling
@@ -213,11 +217,13 @@ This will produce `<a class="sorted-asc" ...>` when sorted ascending, allowing y
 By default, clicking a column header sorts ascending first. You can change this per-column to sort descending on first click (useful for date columns where you typically want most recent first):
 
 Django template:
+
 ```html
 {% anchor created_date _("Created") "desc" %}
 ```
 
 Jinja2 template:
+
 ```html
 {{ sorting_anchor(request, "created_date", "Created", "desc") }}
 ```
@@ -236,6 +242,7 @@ need_python_sorting(queryset, "my_property")
 ```
 
 If you must sort by a computed value on large datasets, consider:
+
 - Adding a database field to store the computed value
 - Using database-level annotations
 - Limiting the queryset size before sorting

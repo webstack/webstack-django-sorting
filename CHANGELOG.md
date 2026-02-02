@@ -1,24 +1,24 @@
-webstack-django-sorting Changelog
-=================================
+# webstack-django-sorting Changelog
 
-v3.0.3
-------
+## v3.0.4
 
 - Migraged from rye to uv
 - Supports Django 6
 
-v3.0.2
-------
+## v3.0.3
+
+- Migraged from rye to uv
+- Supports Django 6
+
+## v3.0.2
 
 - Removed ipdb import. Thanks zerolab.
 
-v3.0.1
-------
+## v3.0.1
 
 - Adjustments to CI
 
-v3.0.0
-------
+## v3.0.0
 
 Released on August 19th, 2024
 
@@ -26,18 +26,15 @@ Released on August 19th, 2024
   Thanks to @RhinoW.
 - Migrate test project to rye
 
-v2.4.0
-------
+## v2.4.0
 
 - Migrate library to rye
 
-v2.3.1
-------
+## v2.3.1
 
 - Fix release v2.3.0 on the supported Django version (v5).
 
-v2.3.0
-------
+## v2.3.0
 
 - Support Django 5.0
 - Fix nulls=last persistency in template (#26). Thanks @sandre35.
@@ -45,13 +42,11 @@ v2.3.0
 - Add home view to `testproj` to list all views
 - Fix HTML of test views
 
-v2.2.1
-------
+## v2.2.1
 
 - Minor change to `README.md`
 
-v2.2.0
-------
+## v2.2.0
 
 No build.
 
@@ -62,36 +57,30 @@ No build.
 - Add more examples for Jinja
 - Various cleanup
 
-v2.1.1
-------
+## v2.1.1
 
 - Fix deprecated import of Markup from Jinja2
 
-v2.1.0
-------
+## v2.1.0
 
 - Add sorting by nulls first or last by @manderj.
 
-v2.0.3
-------
+## v2.0.3
 
 - Added Django 4.0 support. Thanks to David Smith.
 - Fix Jinja2 is required (#19)
 
-v2.0.2
-------
+## v2.0.2
 
 - Fix missing other GET params in anchors
 - Fix path to jinja2 tags in testproj
 - Fix trailing commas in classifiers
 
-v2.0.1
-------
+## v2.0.1
 
 - Fix trailing commas in classifiers (`setup.cfg`).
 
-v2.0.0
-------
+## v2.0.0
 
 Released on February 23th, 2021
 
@@ -110,24 +99,21 @@ Released on February 23th, 2021
 - Remove support of Python 2 and upgrade to Django >=3.0
 - Various cleanups
 
-v1.0.2
-------
+## v1.0.2
 
 Released on September 23th 2020
 
 - Fix cache issue with translatable anchors. Thanks Kim Wong.
 - Updated README.md
 
-v1.0.1
-------
+## v1.0.1
 
 Released on March 1st 2017
 
 - Improved README
 - Don't return None when queryset is empty (closes #8)
 
-v1.0.0
-------
+## v1.0.0
 
 Released on January 24th 2017
 
@@ -138,8 +124,7 @@ Released on January 24th 2017
 - Improved Python 3 support
 - Add first tests
 
-v0.5.0
-------
+## v0.5.0
 
 Released on January 3rd 2017
 
@@ -147,8 +132,7 @@ Released on January 3rd 2017
 - Fix reading of README.rst with Python 3
 - Cleanup in test project
 
-v0.4.3
-------
+## v0.4.3
 
 Released on December 10th 2016
 
