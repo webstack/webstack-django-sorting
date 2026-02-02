@@ -11,45 +11,6 @@ from .. import common, settings
 register = template.Library()
 
 
-def anchor(parser: Parser, token: Token) -> SortAnchorNode:
-    """
-    Parses a tag that's supposed to be in this format '{% anchor field title %}'
-    Title may be a "string", _("trans string"), or variable
-    Optional - default sort direction to desc '{% anchor field title "desc" %}'
-    """
-    bits = [b for b in token.split_contents()]
-    if len(bits) < 2:
-        raise template.TemplateSyntaxError("anchor tag takes at least 1 argument.")
-
-    title_is_var = False
-    title_is_translatable = False
-    try:
-        title = bits[2]
-        if title[0] in ('"', "'"):
-            if title[0] == title[-1]:
-                title = title[1:-1]
-            else:
-                raise template.TemplateSyntaxError(
-                    'anchor tag title must be a "string", _("trans string"), or variable'
-                )
-        elif title.startswith('_("') or title.startswith("_('"):
-            title_is_translatable = True
-        else:
-            title_is_var = True
-    except IndexError:
-        title = bits[1].capitalize()
-
-    default_sort_order = "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
-
-    return SortAnchorNode(
-        bits[1].strip(),
-        title.strip(),
-        title_is_var,
-        title_is_translatable,
-        default_sort_order,
-    )
-
-
 class SortAnchorNode(template.Node):
     """
     Renders an <a> HTML tag with a link which href attribute
@@ -90,30 +51,6 @@ class SortAnchorNode(template.Node):
         )
 
 
-def autosort(parser: Parser, token: Token) -> SortedDataNode:
-    """Parse the autosort template tag."""
-    bits = [b.strip("\"'") for b in token.split_contents()]
-    help_msg = "autosort tag synopsis: {%% autosort queryset [as context_variable] %%}"
-    context_var: str | None = None
-
-    # Check if their is some optional parameter (as new_context_var, nulls)
-    if 2 > len(bits) > 7:
-        raise template.TemplateSyntaxError(help_msg)
-
-    context_var = None
-    null_ordering: str | None = None
-
-    for index, bit in enumerate(bits):
-        if index > 1:
-            if bit == "as" and index + 1 < len(bits):
-                context_var = bits[index + 1]
-                del bits[index : index + 1]
-            if bit.startswith("nulls"):
-                null_ordering = bit[len("nulls=") :]
-
-    return SortedDataNode(bits[1], null_ordering, context_var=context_var)
-
-
 class SortedDataNode(template.Node):
     """
     Automatically sort a queryset with {% autosort queryset %}
@@ -152,6 +89,69 @@ class SortedDataNode(template.Node):
             context[key] = queryset
 
         return ""
+
+
+def anchor(parser: Parser, token: Token) -> SortAnchorNode:
+    """
+    Parses a tag that's supposed to be in this format '{% anchor field title %}'
+    Title may be a "string", _("trans string"), or variable
+    Optional - default sort direction to desc '{% anchor field title "desc" %}'
+    """
+    bits = [b for b in token.split_contents()]
+    if len(bits) < 2:
+        raise template.TemplateSyntaxError("anchor tag takes at least 1 argument.")
+
+    title_is_var = False
+    title_is_translatable = False
+    try:
+        title = bits[2]
+        if title[0] in ('"', "'"):
+            if title[0] == title[-1]:
+                title = title[1:-1]
+            else:
+                raise template.TemplateSyntaxError(
+                    'anchor tag title must be a "string", _("trans string"), or variable'
+                )
+        elif title.startswith('_("') or title.startswith("_('"):
+            title_is_translatable = True
+        else:
+            title_is_var = True
+    except IndexError:
+        title = bits[1].capitalize()
+
+    default_sort_order = "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
+
+    return SortAnchorNode(
+        bits[1].strip(),
+        title.strip(),
+        title_is_var,
+        title_is_translatable,
+        default_sort_order,
+    )
+
+
+def autosort(parser: Parser, token: Token) -> SortedDataNode:
+    """Parse the autosort template tag."""
+    bits = [b.strip("\"'") for b in token.split_contents()]
+    help_msg = "autosort tag synopsis: {%% autosort queryset [as context_variable] %%}"
+    context_var: str | None = None
+
+    # Check if their is some optional parameter (as new_context_var, nulls)
+    if 2 > len(bits) > 7:
+        raise template.TemplateSyntaxError(help_msg)
+
+    context_var = None
+    null_ordering: str | None = None
+
+    for index, bit in enumerate(bits):
+        if index > 1:
+            if bit == "as" and index + 1 < len(bits):
+                context_var = bits[index + 1]
+                del bits[index : index + 1]
+            if bit.startswith("nulls"):
+                null_ordering = bit[len("nulls=") :]
+
+    return SortedDataNode(bits[1], null_ordering, context_var=context_var)
 
 
 anchor = register.tag(anchor)
