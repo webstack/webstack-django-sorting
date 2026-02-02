@@ -35,9 +35,7 @@ def anchor(parser, token):
     except IndexError:
         title = bits[1].capitalize()
 
-    default_sort_order = (
-        "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
-    )
+    default_sort_order = "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
 
     return SortAnchorNode(
         bits[1].strip(),
@@ -61,9 +59,7 @@ class SortAnchorNode(template.Node):
 
     """
 
-    def __init__(
-        self, field, title, title_is_var, title_is_translatable, default_sort_order
-    ):
+    def __init__(self, field, title, title_is_var, title_is_translatable, default_sort_order):
         self.field = field
         self.title = title
         self.title_is_var = title_is_var
@@ -85,9 +81,7 @@ class SortAnchorNode(template.Node):
 
 def autosort(parser, token):
     bits = [b.strip("\"'") for b in token.split_contents()]
-    help_msg = (
-        "autosort tag synopsis: {%% autosort queryset [as " "context_variable] %%}"
-    )
+    help_msg = "autosort tag synopsis: {%% autosort queryset [as context_variable] %%}"
     context_var = None
 
     # Check if their is some optional parameter (as new_context_var, nulls)

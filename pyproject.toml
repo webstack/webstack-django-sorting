@@ -52,3 +52,28 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/webstack_django_sorting"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.8"
+plugins = ["mypy_django_plugin.main"]
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = "django.*"
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "testproj.settings"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "testproj.settings"
+pythonpath = ["src/testproj"]

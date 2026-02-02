@@ -9,12 +9,8 @@ class IndexTest(TestCase):
     def setUp(self):
         self.url = reverse("secret_list")
 
-        self.foo_file = models.SecretFile.objects.create(
-            filename="foo.txt", order=1, size=1024
-        )
-        self.bar_file = models.SecretFile.objects.create(
-            filename="bar.txt", order=2, size=512
-        )
+        self.foo_file = models.SecretFile.objects.create(filename="foo.txt", order=1, size=1024)
+        self.bar_file = models.SecretFile.objects.create(filename="bar.txt", order=2, size=512)
 
     def test_list(self):
         response = self.client.get(self.url)
@@ -46,15 +42,9 @@ class NullsTestCase(TestCase):
         self.nulls_first_url = reverse("nulls_first")
         self.nulls_last_url = reverse("nulls_last")
 
-        self.foo_file = models.SecretFile.objects.create(
-            filename="foo.txt", order=1, size=1024
-        )
-        self.bar_file = models.SecretFile.objects.create(
-            filename="bar.txt", order=2, size=512
-        )
-        self.none_file = models.SecretFile.objects.create(
-            filename=None, order=3, size=512
-        )
+        self.foo_file = models.SecretFile.objects.create(filename="foo.txt", order=1, size=1024)
+        self.bar_file = models.SecretFile.objects.create(filename="bar.txt", order=2, size=512)
+        self.none_file = models.SecretFile.objects.create(filename=None, order=3, size=512)
 
     def test_sorting_nulls_first(self):
         """Verify None sorted field_name is in first places when sorting in asc and desc order"""

@@ -8,14 +8,14 @@ def home(request):
 
 
 def secret_list(request):
-    return render(
-        request, "secret_list.html", {"secret_files": models.SecretFile.objects.all()}
-    )
+    return render(request, "secret_list.html", {"secret_files": models.SecretFile.objects.all()})
+
 
 def secret_list_some_desc(request):
     return render(
         request, "secret_list_some_desc.html", {"secret_files": models.SecretFile.objects.all()}
     )
+
 
 def secret_list_nulls_first(request):
     return render(
@@ -34,14 +34,14 @@ def secret_list_nulls_last(request):
 
 
 def jinja_secret_list(request):
-    return render(
-        request, "secret_list.jinja2", {"secret_files": models.SecretFile.objects.all()}
-    )
+    return render(request, "secret_list.jinja2", {"secret_files": models.SecretFile.objects.all()})
+
 
 def jinja_secret_list_some_desc(request):
     return render(
         request, "secret_list_some_desc.jinja2", {"secret_files": models.SecretFile.objects.all()}
     )
+
 
 def jinja_secret_list_nulls_first(request):
     return render(
