@@ -3,14 +3,21 @@ Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 """
 
 from operator import attrgetter
+from typing import Any, Literal, Sequence
 
-from django.db.models import F
-from django.http import Http404
+from django.db.models import F, QuerySet
+from django.http import Http404, HttpRequest
 
 from . import settings
 
 
-def render_sort_anchor(request, field_name, title, default_direction):
+def render_sort_anchor(
+    request: HttpRequest,
+    field_name: str,
+    title: str,
+    default_direction: Literal["asc", "desc"],
+) -> str:
+    """Render an HTML anchor tag for sorting a column."""
     get_params = request.GET.copy()
     sort_by = get_params.get("sort", None)
     if sort_by == field_name:
@@ -41,9 +48,9 @@ def render_sort_anchor(request, field_name, title, default_direction):
     return f'<a href="{request.path}{url_append}" title="{title}">{title}{icon}</a>'
 
 
-def get_order_by_from_request(request):
+def get_order_by_from_request(request: HttpRequest) -> str:
     """
-    Retrieve field used for sorting a queryset
+    Retrieve field used for sorting a queryset.
 
     :param request: HTTP request
     :return: the sorted field name, prefixed with "-" if ordering is descending
@@ -54,7 +61,8 @@ def get_order_by_from_request(request):
     return f"{sort_sign}{field_name}"
 
 
-def need_python_sorting(queryset, order_by):
+def need_python_sorting(queryset: QuerySet[Any], order_by: str) -> bool:
+    """Check if Python sorting is needed (for non-database fields)."""
     if order_by.find("__") >= 0:
         # Python can't sort order_by with '__'
         return False
@@ -65,9 +73,19 @@ def need_python_sorting(queryset, order_by):
     return field not in field_names
 
 
-def sort_queryset(queryset, order_by, null_ordering):
-    """order_by is an Django ORM order_by argument"""
+def sort_queryset(
+    queryset: QuerySet[Any],
+    order_by: str,
+    null_ordering: dict[str, bool],
+) -> QuerySet[Any] | Sequence[Any]:
+    """
+    Sort a queryset by the given field.
 
+    :param queryset: The queryset to sort
+    :param order_by: Django ORM order_by argument (e.g., "name" or "-name")
+    :param null_ordering: Dict with nulls_first or nulls_last setting
+    :return: Sorted queryset or list (if Python sorting is used)
+    """
     if not order_by:
         # In this case the queryset can't be ordered (no field name specified)
         # even though nulls ordering is set
@@ -79,7 +97,7 @@ def sort_queryset(queryset, order_by, null_ordering):
     if order_by[0] == "-":
         if len(order_by) == 1:
             # Prefix without field name
-            raise ValueError
+            raise ValueError("Order by prefix without field name")
 
         reverse = True
         name = order_by[1:]
@@ -91,13 +109,23 @@ def sort_queryset(queryset, order_by, null_ordering):
         # Fallback on pure Python sorting (much slower on large data)
         if hasattr(queryset[0], name):
             return sorted(queryset, key=attrgetter(name), reverse=reverse)
-        raise AttributeError
+        raise AttributeError(f"Object has no attribute '{name}'")
 
     ordering_exp = (F(name).desc if reverse else F(name).asc)(**null_ordering)
     return queryset.order_by(ordering_exp)
 
 
-def get_null_ordering(request, default_template_ordering=None):
+def get_null_ordering(
+    request: HttpRequest,
+    default_template_ordering: str | None = None,
+) -> dict[str, bool]:
+    """
+    Get null ordering configuration from request or template default.
+
+    :param request: HTTP request
+    :param default_template_ordering: Default ordering from template ("first" or "last")
+    :return: Dict with nulls_first or nulls_last setting, or empty dict
+    """
     # Prioritize changes in URL parameter over the default template variable
     nulls_value = request.GET.get("nulls", default_template_ordering)
     if nulls_value:

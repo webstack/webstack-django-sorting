@@ -1,5 +1,9 @@
+from typing import Literal
+
 from django import template
 from django.http import Http404
+from django.template import Context
+from django.template.base import Parser, Token
 from django.utils.translation import gettext_lazy as _
 
 from .. import common, settings
@@ -7,7 +11,7 @@ from .. import common, settings
 register = template.Library()
 
 
-def anchor(parser, token):
+def anchor(parser: Parser, token: Token) -> SortAnchorNode:
     """
     Parses a tag that's supposed to be in this format '{% anchor field title %}'
     Title may be a "string", _("trans string"), or variable
@@ -59,14 +63,21 @@ class SortAnchorNode(template.Node):
 
     """
 
-    def __init__(self, field, title, title_is_var, title_is_translatable, default_sort_order):
+    def __init__(
+        self,
+        field: str,
+        title: str,
+        title_is_var: bool,
+        title_is_translatable: bool,
+        default_sort_order: Literal["asc", "desc"],
+    ) -> None:
         self.field = field
         self.title = title
         self.title_is_var = title_is_var
         self.title_is_translatable = title_is_translatable
         self.default_sort_order = default_sort_order
 
-    def render(self, context):
+    def render(self, context: Context) -> str:
         if self.title_is_var:
             display_title = context[self.title]
         elif self.title_is_translatable:
@@ -79,17 +90,18 @@ class SortAnchorNode(template.Node):
         )
 
 
-def autosort(parser, token):
+def autosort(parser: Parser, token: Token) -> SortedDataNode:
+    """Parse the autosort template tag."""
     bits = [b.strip("\"'") for b in token.split_contents()]
     help_msg = "autosort tag synopsis: {%% autosort queryset [as context_variable] %%}"
-    context_var = None
+    context_var: str | None = None
 
     # Check if their is some optional parameter (as new_context_var, nulls)
     if 2 > len(bits) > 7:
         raise template.TemplateSyntaxError(help_msg)
 
     context_var = None
-    null_ordering = None
+    null_ordering: str | None = None
 
     for index, bit in enumerate(bits):
         if index > 1:
@@ -107,12 +119,17 @@ class SortedDataNode(template.Node):
     Automatically sort a queryset with {% autosort queryset %}
     """
 
-    def __init__(self, queryset_var, null_ordering, context_var=None):
+    def __init__(
+        self,
+        queryset_var: str,
+        null_ordering: str | None,
+        context_var: str | None = None,
+    ) -> None:
         self.queryset_var = template.Variable(queryset_var)
         self.context_var = context_var
         self.null_ordering = null_ordering
 
-    def render(self, context):
+    def render(self, context: Context) -> str:
         if self.context_var is not None:
             key = self.context_var
         else:
