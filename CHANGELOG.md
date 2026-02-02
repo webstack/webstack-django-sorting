@@ -1,9 +1,22 @@
 # webstack-django-sorting Changelog
 
+## v3.1.1
+
+- Fix typing issues
+- Fix ruff errors
+
+## v3.1.0
+
+- Support of CSS classes to style ordering
+- Improve test coverage
+- New dedicated views to see CSS classes in action
+
 ## v3.0.4
 
-- Migraged from rye to uv
-- Supports Django 6
+- Fix 'dir' should be an empty string when undefined
+- Use mypy and ruff
+- Add test dependencies
+- Typing
 
 ## v3.0.3
 
