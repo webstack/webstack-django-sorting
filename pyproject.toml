@@ -14,7 +14,7 @@ maintainers = [
 ]
 dependencies = ["Django>=3.0, <7.0"]
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.12"
 license = "BSD-3-Clause"
 keywords = ["django", "sorting", "table"]
 classifiers = [
@@ -55,13 +55,13 @@ packages = ["src/webstack_django_sorting"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py38"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.12"
 plugins = ["mypy_django_plugin.main"]
 strict = false
 warn_return_any = true
