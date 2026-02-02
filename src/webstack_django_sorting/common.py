@@ -20,15 +20,18 @@ def render_sort_anchor(
     """Render an HTML anchor tag for sorting a column."""
     get_params = request.GET.copy()
     sort_by = get_params.get("sort", None)
+    css_class = ""
+    icon = ""
+
     if sort_by == field_name:
         dir = get_params.get("dir", "")
 
         if dir == "asc":
             icon = settings.DEFAULT_SORT_UP
+            css_class = settings.SORTING_CSS_CLASS_ASC
         elif dir == "desc":
             icon = settings.DEFAULT_SORT_DOWN
-        else:
-            icon = ""
+            css_class = settings.SORTING_CSS_CLASS_DESC
 
         # Mapping of direction transitions based on the default sort direction
         transition_map = {
@@ -38,14 +41,16 @@ def render_sort_anchor(
         next_direction_code = transition_map[default_direction].get(dir, "")
 
     else:
-        icon = ""
         next_direction_code = default_direction
 
     # Not usual dict (can't update to replace)
     get_params["sort"] = field_name
     get_params["dir"] = next_direction_code
     url_append = "?" + get_params.urlencode() if get_params else ""
-    return f'<a href="{request.path}{url_append}" title="{title}">{title}{icon}</a>'
+
+    # Build the anchor tag with optional CSS class
+    class_attr = f' class="{css_class}"' if css_class else ""
+    return f'<a href="{request.path}{url_append}"{class_attr} title="{title}">{title}{icon}</a>'
 
 
 def get_order_by_from_request(request: HttpRequest) -> str:
