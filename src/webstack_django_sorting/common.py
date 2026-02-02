@@ -1,6 +1,7 @@
 """
 Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 """
+
 from operator import attrgetter
 
 from django.db.models import F
@@ -11,11 +12,10 @@ from . import settings
 
 def render_sort_anchor(request, field_name, title, default_direction):
     get_params = request.GET.copy()
-    sort_by = get_params.get("sort", None) 
+    sort_by = get_params.get("sort", None)
     if sort_by == field_name:
+        dir = get_params.get("dir", "")
 
-        dir = get_params.get("dir")
-        
         if dir == "asc":
             icon = settings.DEFAULT_SORT_UP
         elif dir == "desc":
@@ -26,7 +26,7 @@ def render_sort_anchor(request, field_name, title, default_direction):
         # Mapping of direction transitions based on the default sort direction
         transition_map = {
             "asc": {"asc": "desc", "desc": "", "": "asc"},
-            "desc": {"desc": "asc", "asc": "", "": "desc"}
+            "desc": {"desc": "asc", "asc": "", "": "desc"},
         }
         next_direction_code = transition_map[default_direction].get(dir, "")
 
