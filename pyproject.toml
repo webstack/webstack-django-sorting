@@ -37,9 +37,8 @@ changelog = "https://github.com/webstack/webstack-django-sorting/blob/master/CHA
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.rye]
-managed = true
-dev-dependencies = []
+[dependency-groups]
+dev = []
 
 [tool.hatch.metadata]
 allow-direct-references = true
