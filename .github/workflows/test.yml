@@ -85,7 +85,6 @@ jobs:
         run: uv sync --group dev
 
       - name: Run tests with coverage
-        working-directory: src/testproj
         run: |
-          uv run coverage run manage.py test testproj
+          uv run coverage run src/testproj/manage.py test testproj.testapp
           uv run coverage report --fail-under=70
