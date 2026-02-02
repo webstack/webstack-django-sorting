@@ -1,6 +1,6 @@
 [project]
 name = "webstack-django-sorting"
-version = "3.1.0"
+version = "3.1.1"
 description = "Easy sorting of tables with Django"
 authors = [
     { name = "Karim A. (aka Directeur)", email = "directeur@gmail.com" },
