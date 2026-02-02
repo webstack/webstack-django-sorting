@@ -3,7 +3,14 @@ from typing import Any, Literal
 
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from markupsafe import Markup
+
+try:
+    from markupsafe import Markup
+except ImportError as e:
+    raise ImportError(
+        "Jinja2 support requires the 'jinja2' package. "
+        "Install it with: uv add webstack-django-sorting[jinja2]"
+    ) from e
 
 from . import common
 

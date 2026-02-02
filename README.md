@@ -30,10 +30,16 @@ To upgrade to `webstack-django-sorting` v1.0.0+, you must remove the old middlew
 
 ## How to use it in your project
 
-The provide is available on PyPI:
+The package is available on PyPI:
 
 ```shell
-uv add webstack_django_sorting
+uv add webstack-django-sorting
+```
+
+For Jinja2 template support, install with the optional dependency:
+
+```shell
+uv add webstack-django-sorting[jinja2]
 ```
 
 The project provides examples of integration with Django and Jinja2 templates.

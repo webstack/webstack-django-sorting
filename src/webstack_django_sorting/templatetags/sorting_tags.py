@@ -82,7 +82,7 @@ class SortedDataNode(template.Node):
                 raise Http404(
                     "Invalid field sorting. If INVALID_FIELD_RAISES_404 were set to "
                     "False, the error would have been ignored."
-                )
+                ) from None
             context[key] = queryset
 
         return ""

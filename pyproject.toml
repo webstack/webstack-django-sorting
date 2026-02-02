@@ -28,6 +28,9 @@ classifiers = [
     "Natural Language :: English",
 ]
 
+[project.optional-dependencies]
+jinja2 = ["jinja2>=3.0"]
+
 [project.urls]
 repository = "https://github.com/webstack/webstack-django-sorting.git"
 changelog = "https://github.com/webstack/webstack-django-sorting/blob/master/CHANGELOG.md"
@@ -45,6 +48,7 @@ dev = [
     "ruff>=0.8",
     "mypy>=1.0",
     "django-stubs>=5.0",
+    "jinja2>=3.1.6",
 ]
 
 [tool.hatch.metadata]

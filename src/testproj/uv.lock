@@ -147,7 +147,11 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "django", specifier = ">=3.0,<7.0" }]
+requires-dist = [
+    { name = "django", specifier = ">=3.0,<7.0" },
+    { name = "jinja2", marker = "extra == 'jinja2'", specifier = ">=3.0" },
+]
+provides-extras = ["jinja2"]
 
 [package.metadata.requires-dev]
 dev = [
