@@ -10,4 +10,4 @@ class SecretFile(models.Model):
     is_secret = models.BooleanField(default=False)
 
     def __str__(self):
-        return "#%d %s" % (self.order, self.filename)
+        return f"#{self.order} {self.filename}"

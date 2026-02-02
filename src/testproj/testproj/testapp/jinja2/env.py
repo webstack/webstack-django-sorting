@@ -1,11 +1,8 @@
-from jinja2.environment import Environment
-
 from django.template.defaultfilters import yesno
 from django.templatetags.static import static
-from webstack_django_sorting.jinja2_globals import (
-    sorting_anchor,
-    sort_queryset,
-)
+from jinja2.environment import Environment
+
+from webstack_django_sorting.jinja2_globals import sort_queryset, sorting_anchor
 
 
 class JinjaEnvironment(Environment):
