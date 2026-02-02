@@ -1,4 +1,4 @@
-from typing import Literal, cast
+from typing import Literal
 
 from django import template
 from django.http import Http404
@@ -116,7 +116,9 @@ def anchor(parser: Parser, token: Token) -> SortAnchorNode:
     except IndexError:
         title = bits[1].capitalize()
 
-    default_sort_order = "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
+    default_sort_order: Literal["asc", "desc"] = (
+        "desc" if len(bits) >= 4 and bits[3].strip("'\"") == "desc" else "asc"
+    )
 
     return SortAnchorNode(
         bits[1].strip(),
