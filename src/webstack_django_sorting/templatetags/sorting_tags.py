@@ -67,10 +67,7 @@ class SortedDataNode(template.Node):
         self.null_ordering = null_ordering
 
     def render(self, context: Context) -> str:
-        if self.context_var is not None:
-            key = self.context_var
-        else:
-            key = self.queryset_var.var
+        key = self.context_var if self.context_var is not None else self.queryset_var.var
 
         queryset = self.queryset_var.resolve(context)
         order_by = common.get_order_by_from_request(context["request"])

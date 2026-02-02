@@ -18,6 +18,22 @@ thead > tr > th > a {
 thead > tr > th > a:visited {
   color: inherit;
 }
+
+/* Sorting CSS classes - demonstrates using CSS instead of HTML entities */
+thead > tr > th > a.sorted-asc {
+  font-weight: bold;
+  color: #e91e63; /* Pink */
+  background-color: #fce4ec;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+thead > tr > th > a.sorted-desc {
+  font-weight: bold;
+  color: #9c27b0; /* Purple */
+  background-color: #f3e5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
 tr > th,
 tr > td {
   padding: 8px;

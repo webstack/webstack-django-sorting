@@ -171,6 +171,65 @@ That's it!
 
 The library provides a few settings that you can define in the Django settings of your project:
 
-- `DEFAULT_SORT_UP`, the HTML character to display the up symbol in the column headers (' &uarr;' by default).
-- `DEFAULT_SORT_DOWN`, the HTML character to display the down symbol in the column headers (' &darr;' by default).
+### Sort indicators
+
+By default, sort direction is shown using HTML entities (arrows):
+
+- `DEFAULT_SORT_UP`, the HTML character to display the up symbol (' &uarr;' by default).
+- `DEFAULT_SORT_DOWN`, the HTML character to display the down symbol (' &darr;' by default).
+
+Alternatively, you can use CSS classes for more flexible styling:
+
+- `SORTING_CSS_CLASS_ASC`, CSS class added to the anchor when sorted ascending (empty by default).
+- `SORTING_CSS_CLASS_DESC`, CSS class added to the anchor when sorted descending (empty by default).
+
+Example with CSS classes:
+
+```python
+# settings.py
+SORTING_CSS_CLASS_ASC = "sorted-asc"
+SORTING_CSS_CLASS_DESC = "sorted-desc"
+```
+
+This will produce `<a class="sorted-asc" ...>` when sorted ascending, allowing you to style the indicator with CSS:
+
+```css
+.sorted-asc::after { content: " \2191"; }  /* Up arrow */
+.sorted-desc::after { content: " \2193"; }  /* Down arrow */
+```
+
+### Error handling
+
 - `SORTING_INVALID_FIELD_RAISES_404`, if true, a 404 response will be returned on invalid use of query parameters (false by default).
+
+## Default Sort Direction
+
+By default, clicking a column header sorts ascending first. You can change this per-column to sort descending on first click (useful for date columns where you typically want most recent first):
+
+Django template:
+```html
+{% anchor created_date _("Created") "desc" %}
+```
+
+Jinja2 template:
+```html
+{{ sorting_anchor(request, "created_date", "Created", "desc") }}
+```
+
+## Performance Considerations
+
+The library uses Django ORM's `order_by()` for database fields, which is efficient. However, when sorting by model properties or computed attributes (not database fields), it falls back to Python sorting which loads all objects into memory.
+
+For large querysets, ensure you're sorting by database fields only. You can check if a field will use Python sorting:
+
+```python
+from webstack_django_sorting.common import need_python_sorting
+
+# Returns True if Python sorting will be used (slower)
+need_python_sorting(queryset, "my_property")
+```
+
+If you must sort by a computed value on large datasets, consider:
+- Adding a database field to store the computed value
+- Using database-level annotations
+- Limiting the queryset size before sorting

@@ -2,8 +2,9 @@
 Common to Django tags (sorting_tags) and Jinja2 globals (jinja2_globals)
 """
 
+from collections.abc import Sequence
 from operator import attrgetter
-from typing import Any, Literal, Sequence
+from typing import Any, Literal
 
 from django.db.models import F, QuerySet
 from django.http import Http404, HttpRequest

@@ -25,5 +25,11 @@ urlpatterns = [
         views.jinja_secret_list_nulls_last,
         name="jinja_nulls_last",
     ),
+    path("css-classes", views.secret_list_css_classes, name="css_classes"),
+    path(
+        "jinja/css-classes",
+        views.jinja_secret_list_css_classes,
+        name="jinja_css_classes",
+    ),
     path("admin/", admin.site.urls),
 ]

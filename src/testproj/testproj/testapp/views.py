@@ -57,3 +57,19 @@ def jinja_secret_list_nulls_last(request):
         "secret_list_nulls_last.jinja2",
         {"secret_files": models.SecretFile.objects.all()},
     )
+
+
+def secret_list_css_classes(request):
+    return render(
+        request,
+        "secret_list_css_classes.html",
+        {"secret_files": models.SecretFile.objects.all()},
+    )
+
+
+def jinja_secret_list_css_classes(request):
+    return render(
+        request,
+        "secret_list_css_classes.jinja2",
+        {"secret_files": models.SecretFile.objects.all()},
+    )

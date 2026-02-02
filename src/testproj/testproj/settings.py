@@ -112,3 +112,8 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = (BASE_DIR / "testproj/static",)
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# Django-sorting CSS classes configuration
+# When set, these CSS classes are added to the anchor tags instead of HTML entities
+SORTING_CSS_CLASS_ASC = "sorted-asc"
+SORTING_CSS_CLASS_DESC = "sorted-desc"
