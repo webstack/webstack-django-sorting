@@ -12,7 +12,7 @@ authors = [
 maintainers = [
     { name = "Stéphane Raimbault", email = "stephane.raimbault@webstack.fr" },
 ]
-dependencies = ["Django>=3.0, <7.0"]
+dependencies = ["Django>=5.0, <7.0"]
 readme = "README.md"
 requires-python = ">=3.12"
 license = "BSD-3-Clause"
@@ -29,7 +29,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-jinja2 = ["jinja2>=3.0"]
+jinja2 = ["jinja2>=3.1.6"]
 
 [project.urls]
 repository = "https://github.com/webstack/webstack-django-sorting.git"
@@ -42,11 +42,11 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "pytest>=8.0",
-    "pytest-django>=4.5",
-    "coverage>=7.0",
-    "ruff>=0.8",
-    "mypy>=1.0",
+    "pytest>=9.0.2",
+    "pytest-django>=4.11.1",
+    "coverage>=7.13.4",
+    "ruff>=0.15.0",
+    "mypy>=1.19.1",
     "jinja2>=3.1.6",
 ]
 
